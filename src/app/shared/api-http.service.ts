@@ -12,7 +12,7 @@ export class ApiHttpService {
         private url = 'localhost';
         private port = '8000';
     // 서버적용할때 사용    
-    // private url = '128.131.0.100';
+    // private url = '';
     // private port = '8080';
    private API_SERVER_URL = 'http://' + this.url + ':' + this.port + '';
    constructor(private http: HttpClient) {}
