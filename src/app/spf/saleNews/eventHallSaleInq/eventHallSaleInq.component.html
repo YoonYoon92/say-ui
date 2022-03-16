@@ -1,0 +1,313 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            (tap)="onTitleTap($event)"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+    
+   
+
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                    (ready)="onReadystartDt($event)"
+                    [value]="startDt"
+                    destroyPickerOnHide="true"
+                    [dateFormat]="'Y/m/d'"
+                    label="시작일"
+                    [editable]="false"
+                    (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtCombobox
+                    [label]="'행사명'"
+                    [store]="eventlist"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'alleventcd'"                    
+                    [displayField]="'eventNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [editable]="false"
+                    (change)="eventlistEvent($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="'01'"  
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                        <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                <ExtCombobox
+                [label]="'PC'"
+                [store]="PcListStore"
+                [placeholder]="'선택하세요'"
+                [valueField]="'pc'"
+                [displayField]="'pcNm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                (change)="PcListStoreEvent($event)"
+            >
+            </ExtCombobox>
+                <ExtTextfield
+                    height="50px"
+                    label = ""
+                    value = "[ 단위: 천원, 명, % ]"
+                    [textAlign]="'right'"
+                    disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{
+                        summaryrow: true
+                        ,gridfilters: true 
+                    }"
+                    [groupFooter]="{
+                        xtype: 'gridsummaryrow'
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                       width='120px'
+                        text="부서명"
+                        dataIndex="nm"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"       
+                        text="당일목표"
+                        dataIndex="try" 
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"   
+                        text="매출"
+                        dataIndex="sale" 
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    
+                    <ExtGridcolumn 
+                        [align]="'right'"   
+                        text="할인"
+                        dataIndex="discount"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"   
+                        text="고객수"
+                        dataIndex="custmernum"
+                        [renderer]="this.renderSign"        
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="객단가"
+                        dataIndex="custmercst"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="달성율"
+                        dataIndex="achivmentrate"
+                        formatter='number("000.00 %")'
+                        summary = 'average'
+                        summaryFormatter='number("000.00%")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        width='160px'
+                        text="누계목표"
+                        dataIndex="sumTry"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        width='160px'
+                        text="누계매출"
+                        dataIndex="sumSale"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="누계할인"
+                        dataIndex="sumDiscount"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="누계고객수"
+                        dataIndex="sumCustmernum"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="누계객단가"
+                        dataIndex="sumCustmercst"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [align]="'right'"
+                        text="누계달성율"
+                        dataIndex="sumAchivmentrate"
+                        formatter='number("000.00 %")'
+                        summary = 'average'
+                        summaryFormatter='number("000.00%")'
+                    >
+                    </ExtGridcolumn>
+                 
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

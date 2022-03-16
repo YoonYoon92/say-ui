@@ -1,0 +1,531 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapSave($event)"
+            text="저장" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapNew($event)"
+            text="신규" 
+        >
+        </ExtButton>
+        <ExtButton 
+        [align]="'right'"
+        [ui]="'alt round'"
+        iconCls="x-fa fa-close"
+        margin= "0 0 0 5"
+        (tap)="onTapClear($event)"
+        text="초기화" 
+        >
+        </ExtButton>
+       
+        <!-- <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton> -->
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: false}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <!--
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="'01'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+                    -->
+                    <ExtCombobox
+                        [label]="'점　코드'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="'01'"
+                        [queryMode]="'local'"
+                        [clearable]="false"
+                        [disabled]="false"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+
+                    <ExtCombobox
+                    [label]="'코너번호'"
+                    [store]="comboStoreCorner"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'corner'"
+                    [displayField]="'cornerCom'"
+                    [queryMode]="'local'"
+                    [clearable]="false"
+                    [editable]="false"
+                    (change)="comboStoreCornerEvent($event)"
+                    >
+                    </ExtCombobox>
+                    
+                        </ExtFieldset>
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        ></ExtFieldset>
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        ></ExtFieldset>
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        ></ExtFieldset>
+
+
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'"  
+            [flex]="1"
+        >
+            <!-- main left -->
+            <ExtPanel 
+                [weight]="10"
+                docked="left"
+                [flex]="1"
+                width="1"
+                [maxWidth]="'1%'"
+                [resizable]="{edges: 'east', dynamic: false}"
+                [border]="true"
+            >
+            </ExtPanel>
+
+             <!-- main center -->
+
+            <!--
+                <ExtPanel  
+                    [layout]="'fit'" 
+                    [height]="'60px'" 
+                    docked="top"
+                    [resizable]="{edges: 'south', dynamic: true}"
+                    [maxHeight]="'300px'"
+                    [minHeight]="'50px'"
+                >
+ 
+            </ExtPanel>  
+             -->
+            <ExtPanel  
+                [layout]="'fit'" 
+                
+                [resizable]="{edges: 'south', dynamic: false}"
+                [maxHeight]="'95%'"
+                [minHeight]="'25px'"
+            >
+
+                  
+                    <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                    >
+                        
+                    <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'코　너　명'"
+                    [value]="formModel.ms05CornerNm"
+                    (change)="onChangeCornerNm($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="11"
+                >
+                </ExtTextfield>
+
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'부 서 번 호'"
+                [value]="formModel.ms05Bu"
+                (change)="onChangeBu($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="2"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'팀 　 번 호'"
+                [value]="formModel.ms05Tim"
+                (change)="onChangeTim($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="2"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'세분류 번호'"
+                [value]="formModel.ms05Pc"
+                (change)="onChangePc($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="2"
+                >
+                </ExtTextfield>
+
+                <ExtCombobox
+                [label]="'코 너 등 급'"
+                [store]="ms0511Store"
+                [placeholder]="'선택하세요'"
+                [valueField]="'ms0511'"
+                [displayField]="'ms0511Nm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                [value]="formModel.ms0511"
+                (change)="onChange0511($event)"
+              
+              
+            >
+            </ExtCombobox>
+
+                <ExtNumberfield
+                [placeholder]="''"
+                [label]="'직 영 인 원'"
+                [value]="formModel.ms0512"
+                (change)="onChange0512($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="5"
+                formatter = 'number("000.00")'
+                >
+                </ExtNumberfield>
+                <ExtNumberfield
+                [placeholder]="''"
+                [label]="'판 촉 인 원'"
+                [value]="formModel.ms0513"
+                (change)="onChange0513($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="5"
+                formatter = 'number("000.00")'
+                >
+                </ExtNumberfield>
+
+                <ExtNumberfield
+                [placeholder]="''"
+                [label]="'코 너 평 수'"
+                [value]="formModel.ms0514"
+                (change)="onChange0514($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="5"
+                formatter = 'number("000.00")'
+                >
+                </ExtNumberfield>
+
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'ZONNING CD'"
+                [value]="formModel.ms0518"
+                (change)="onChange0518($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="3"
+                >
+                </ExtTextfield>
+
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'관 리 유 무'"
+                [value]="formModel.ms05212"
+                (change)="onChange05212($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="1"
+                >
+                </ExtTextfield>
+
+             
+                <ExtCombobox
+                [label]="'매 장 종 류'"
+                [store]="ms05703Store"
+                [placeholder]="'선택하세요'"
+                [valueField]="'ms05703'"
+                [displayField]="'ms05703Nm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                [value]="formModel.ms05703"
+                (change)="onChange05703($event)"
+               
+            >
+            </ExtCombobox>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'신규입점일'"
+                [value]="formModel.ms05704"
+                (change)="onChange05704($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="8"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'매출분석시작'"
+                [value]="formModel.ms05705"
+                (change)="onChange05705($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="8"
+                >
+                </ExtTextfield>
+
+
+
+                
+                
+                </ExtFieldset>
+                 <!--2번째열 str-->
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 
+                 >
+
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'온라인코너'"
+                 [value]="formModel.ms05CornerOn"
+                 [maxLength]="5"
+                 >
+                 </ExtTextfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'부　서　명'"
+                 [value]="formModel.ms05BuNm"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'팀　　　명'"
+                 [value]="formModel.ms05TimNm"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'세분류　명'"
+                 [value]="formModel.ms05PcNm"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 
+ 
+                 </ExtFieldset> 
+                 <!--2번째열 end-->
+                 <!--3번째열 str-->
+ 
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 >
+
+                 <ExtNumberfield
+                 [placeholder]="''"
+                 [label]="'코드폐기일'"
+                 [value]="formModel.ms0515"
+                 (change)="onChange0515($event)"
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="8"
+                 >
+                 </ExtNumberfield>
+                 <ExtNumberfield
+                 [placeholder]="''"
+                 [label]="'코드부여일'"
+                 [value]="formModel.ms0516"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 disabled="true"
+                 >
+                 </ExtNumberfield>
+ 
+                 <ExtNumberfield
+                 [placeholder]="''"
+                 [label]="'코드수정일'"
+                 [value]="formModel.ms0517"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 disabled="true"
+                 >
+                 </ExtNumberfield>
+ 
+                 <ExtNumberfield
+                 [placeholder]="''"
+                 [label]="'계약시작일'"
+                 [value]="formModel.ms05103"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="8"
+                 disabled="true"
+                 >
+                 </ExtNumberfield>
+                 <ExtNumberfield
+                 [placeholder]="''"
+                 [label]="'계약종료일'"
+                 [value]="formModel.ms05104"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="8"
+                 disabled="true"
+                 >
+                 </ExtNumberfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'계 약 사 유'"
+                 [value]="formModel.dgs0204"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="20"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'퇴　점　일'"
+                 [value]="formModel.ms05107"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="8"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 <ExtTextfield
+                 [placeholder]="''"
+                 [label]="'퇴 점 사 유'"
+                 [value]="formModel.egs0204"
+                 
+                 [required]="false"
+                 [clearable]="false"
+                 [maxLength]="20"
+                 disabled="true"
+                 >
+                 </ExtTextfield>
+                 
+ 
+                 </ExtFieldset>  
+                 <!--3번째열 end-->
+                 <!--4번째열 str-->
+ 
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 >
+                 
+ 
+                 </ExtFieldset>  
+                 <!--4번째열 end-->
+  
+                
+            </ExtPanel>
+           
+            </ExtPanel>
+        </ExtPanel>
+
+</ExtContainer>

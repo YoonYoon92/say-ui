@@ -1,0 +1,196 @@
+<ExtContainer
+  layout="fit"
+  [fitToParent]="true"
+  padding="0 0 0 0"
+  #dashboardMain
+>
+  <ExtTitlebar 
+    docked="top" 
+    [weight]="10" 
+    [title]="envService.progName"
+    [platformConfig]="{ 
+      phone   : { titleAlign: 'center' } 
+  ,   desktop : { titleAlign: 'left' }
+  }"
+  >
+    <ExtButton 
+      iconCls="x-fa fa-bars" 
+      [ui]="'alt round'" 
+      (tap)="toggleAppMenu($event)" 
+      ripple="false"
+    >
+    </ExtButton>
+   
+    <ExtButton
+        [align]="'right'"
+        [ui]="'alt round'"
+        [style]='{ "float": "right" }'
+        iconCls="x-fa fa-cog"
+        (tap)="onTabSetting($event)"
+        tooltip="설정"
+    ></ExtButton>
+    <ExtButton
+        [align]="'right'"
+        [ui]="'alt round'"
+        [padding]="'0 0 0 10'"
+        [style]='{ "float": "right" }'
+        iconCls="x-fa fa-sign-out-alt"
+        (tap)="onConfirmLogout()"
+        tooltip="로그아웃"
+    ></ExtButton>
+  </ExtTitlebar>
+
+  <ExtPanel 
+    [weight]="10"
+    docked="left"
+    scrollable="y"
+    width="300"
+    [maxWidth]="'500'"
+    [style]="{zIndex: 100, backgroundColor: 'white'}"
+    [resizable]="{edges: 'east', dynamic: true}"
+    [header]="false"
+    [collapsible]="{ direction: 'left' }"
+    [collapsed]="false"
+    [shadow]="true" 
+    [hidden]="hideAppMenu"
+  >
+    <!-- <ExtSearchfield
+      docked="top"
+      ui="faded"
+      margin="7"
+      (change)="filterNav($event)"
+    >
+    </ExtSearchfield> -->
+    <ExtContainer
+      docked="top"
+      margin="7"
+    >
+      <div #extitem class="accordion" id="userInfo">
+        <div class="card" >
+          <div class="card-header" id="userDetail" style="padding : 0.25rem;">
+            <h2 class="mb-0">
+              <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              안녕하세요.    {{envService.account.userName}}님!!
+              </button>
+            </h2>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="userDetail" data-parent="#userInfo">
+            <div class="card-body" style="padding: 0.25rem;">
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">IP<span class="badge badge-pill">{{envService.account.userIp}}</span></li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">마지막접속<span class="badge badge-pill">{{envService.account.lateDate}}</span></li>
+                <!-- <li class="list-group-item d-flex justify-content-between align-items-center">최근접속메뉴
+                  <span class="badge badge-pill">{{envService.account.latePgm}}</span></li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </ExtContainer>
+    
+    <ExtTreelist
+      (selectionchange)="selectionchangeNavTreeList($event)"
+      (itemclick)="onItemClickTreeList($event)"
+      ref="tree"
+      ui="nav"
+      margin="3"
+      [store]="treeStore"
+      [expanderFirst]="false"
+      [expanderOnly]="false"
+      [selectOnExpander]="false"
+    >
+    </ExtTreelist>
+
+  </ExtPanel>
+
+  <!--싱글-->
+   <ExtPanel  padding="5 5 5 5" [flex]="1" [hidden]="this.envService.Setting.view === 'tab' ? true : false">
+    <div #extitem style="width: 100%; height: 100%;">
+      <router-outlet #extitem></router-outlet>
+    </div>
+  </ExtPanel>
+  
+  <!--multi tab-->
+  <ExtPanel  padding="1 0 0 1" [flex]="1" [hidden]="this.envService.Setting.view === 'tab' ? false : true">
+    <ExtContainer layout="fit" fitToParent="true">
+      <ExtTabpanel
+        [flex]="1"
+        (ready)="tabPanelReady($event)"
+        [style]="{ backgroundColor: 'white' }"
+        [tabBar]="{ layout: { pack: 'start', overflow: 'scroller' } }"
+        [shadow]="false"
+      >
+        <ExtPanel
+          [title]="'Home'"
+          iconCls="x-fa fa-home"
+          layout="fit"
+        >
+          <div #extitem style="width: 100%; height: 100%;">
+            <app-index-dashboard [node]=""></app-index-dashboard>
+          </div>
+        </ExtPanel>
+        <ExtPanel
+          *ngFor="let tab of tabs"
+          closable="true"
+          [title]="tab.text.concat('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;')"
+          [iconCls]="tab.iconCls"
+          (destroy)="closeTab($event, tab.id)"
+        >
+          <div #extitem style="width: 100%; height: 100%;">
+            <app-index-tabz [node]="tab"></app-index-tabz>
+          </div>
+        </ExtPanel>
+      </ExtTabpanel>
+    </ExtContainer>
+  </ExtPanel>
+  
+  <ExtPanel
+      docked="right"
+      [hidden]="false"
+      [collapsed]="isCollapse"
+      [weight]="5"
+      width="200"
+      layout= "fit"
+      [style]="{zIndex: 3}"
+      [resizable]="{ edges: 'west', dynamic: true }"
+      [header]="false"
+      [collapsible]="{ direction: 'right' }"
+    >
+      <ExtContainer
+          layout="fit" 
+          flex="1" 
+      >
+        <ExtTitlebar
+            docked="top"
+            [platformConfig]="{ 
+                phone   : { titleAlign: 'center' } 
+            ,   desktop : { titleAlign: 'left' }
+            }"
+        >
+            <ExtButton 
+                [text]="'Setting'"
+                [align]="'left'" 
+                iconCls="x-fa fa-cog" 
+                [ui]="'alt round'"
+                (tap)="onTabSetting($event)"
+                [tooltip]="'close'"
+            >
+            </ExtButton>
+        </ExtTitlebar>
+
+        <ExtPanel
+          [layout]="'fit'" 
+          [flex]="1"
+        >
+          <ExtFormpanel>
+            <ExtTogglefield
+                [label]="'toggle'"
+                [value]="false"
+                
+            ></ExtTogglefield>
+          </ExtFormpanel>
+        </ExtPanel>
+      </ExtContainer>
+  </ExtPanel>
+</ExtContainer>

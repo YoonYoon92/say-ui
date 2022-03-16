@@ -1,0 +1,284 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            (tap)="onTitleTap($event)"
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+    <!-- contnent-->
+    <ExtPanel  
+    [shadow]="true" 
+    [layout]="{ type: 'vbox', align: 'strech' }"
+    [border]="true"
+    [scrollable]="true"
+>
+    <!--search area-->
+    <!--한줄 50px 두줄 100px... (x2)-->
+    <ExtPanel  
+        [layout]="'fit'" 
+        [height]="'100px'" 
+        docked="top"
+        [resizable]="{edges: 'south', dynamic: true}"
+        [maxHeight]="'300px'"
+        [minHeight]="'50px'"
+    >
+        <ExtFormpanel
+            [layout]="{
+                type: 'box',
+                vertical: false
+            }"
+        >
+            <!-- First line -->
+            <ExtFieldset
+                [layout]="'form'"
+                [flex]="1"
+            >
+                <ExtDatefield
+                    (ready)="onReadysearchFromDay($event)"
+                    [value]="frDate"
+                    destroyPickerOnHide="true"
+                    [dateFormat]="'Y/m/d(D)'"
+                    label="From Date"
+                    (change)="onChangeStartDt($event)"
+                    [editable]="false"
+                >
+                </ExtDatefield>
+
+                <ExtDatefield
+                    (ready)="onReadysearchToDay($event)"
+                    [value]="toDate"
+                    destroyPickerOnHide="true"
+                    [dateFormat]="'Y/m/d(D)'"
+                    label="To Date"
+                    [editable]="false"
+                    (change)="onChangeEndDt($event)"
+                >
+                </ExtDatefield>
+            </ExtFieldset>
+
+            <!-- 필드간 좌우 간격  -->
+            <ExtComponent [width]="10"></ExtComponent>
+
+            <!-- Second line -->
+            <ExtFieldset
+                [layout]="'form'"
+                [flex]="1"
+            >
+                <ExtCombobox
+                    [label]="'점'"
+                    [store]="comboStoreLv1"
+                    [value]="jumComboVal"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'storeLvCd'"
+                    [displayField]="'storeLvNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [editable]="false"
+                    (change)="comboStoreLv1Event($event)"
+                >
+                </ExtCombobox>
+            </ExtFieldset>
+
+            <!-- 필드간 좌우 간격  -->
+            <ExtComponent [width]="10"></ExtComponent>
+
+            <!-- Third line -->
+            <ExtFieldset
+                [layout]="'form'"
+                [flex]="1"
+            >
+                <ExtCombobox
+                    [label]="'부'"
+                    [store]="comboStoreLv2"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'storeLvCd'"
+                    [displayField]="'storeLvNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [editable]="false"
+                    (change)="comboStoreLv2Event($event)"
+                >
+                </ExtCombobox>
+            </ExtFieldset>
+
+            <!-- 필드간 좌우 간격 -->
+            <ExtComponent [width]="10"></ExtComponent>
+
+            <!-- Fourth line -->
+            <ExtFieldset
+                [layout]="'form'"
+                [flex]="1"
+            >
+                <ExtCombobox
+                    [label]="'팀'"
+                    [store]="comboStoreLv3"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'storeLvCd'"
+                    [displayField]="'storeLvNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [editable]="false"
+                    (change)="comboStoreLv3Event($event)"
+                >
+                </ExtCombobox> 
+                <ExtTextfield
+                    [textAlign]="'right'"
+                    [value]="'단위(원)'"
+                    [maxLength]='10'
+                    disabled="true"
+                >
+                </ExtTextfield>               
+            </ExtFieldset>             
+        </ExtFormpanel>
+        
+    </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [plugins]="{ gridfilters: true }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                        text="코너번호"
+                        filter="string"
+                        dataIndex="corno"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코너명"
+                        filter="string"
+                        dataIndex="cornm"
+                        [width]='150'
+                    >
+                    </ExtGridcolumn>
+                    <ExtColumn 
+                        text="당 년" 
+                        [columns]="yearColumns"
+                        [border] ="'True'"                        
+                    >
+                        <ExtGridcolumn 
+                            text="매출"
+                            dataIndex="netSale"
+                            formatter='number("000,000,000")'
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="월평균"
+                            dataIndex="avg"
+                            formatter='number("000,000,000")'
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            [width]='20'
+                        ></ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="전 년" 
+                        [columns]="yearColumns"     
+                    >
+                        <ExtGridcolumn 
+                            text="매출"
+                            dataIndex="netSaleLastY"
+                            formatter='number("000,000,000")'
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="월평균"
+                            dataIndex="avgLastY"
+                            formatter='number("000,000,000")'
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            [width]='20'
+                        ></ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtGridcolumn 
+                        text="신장율"
+                        dataIndex="incrsrate"
+                        formatter='number("000.00 %")'
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn
+                        [width]='20'
+                    ></ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="입점일"
+                        dataIndex="inDate"                        
+                        [align]="'center'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="퇴점일"
+                        dataIndex="outDate"                        
+                        [align]="'center'"
+                    >
+                    </ExtGridcolumn>
+                    
+
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+
+
+    
+</ExtContainer>

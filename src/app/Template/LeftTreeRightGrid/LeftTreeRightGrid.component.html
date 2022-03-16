@@ -1,0 +1,299 @@
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >                                                
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapSave($event)"
+            text="저장" 
+        >                                                
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-eraser"
+            margin="0 0 0 5"
+            (tap)="onTapModify($event)"
+            text="수정" 
+        >                                                
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-trash-alt"
+            margin= "0 0 0 5"
+            (tap)="onTapDelete($event)"
+            text="삭제" 
+        >                                                
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-edit"
+            margin= "0 0 0 5"
+            (tap)="onTapNew($event)"
+            text="신규" 
+        >                                                
+        </ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="시작일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtTextfield
+                        [label]="'Text Field'"
+                        [placeholder]="'Text Field'"
+                        [value]="paramModel.textFieldVal"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'comboBox'"
+                        [store]="comboStore"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'comboId'"
+                        [displayField]="'comboNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        (change)="onChangeComboBox($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtUrlfield
+                        [label]="'Url Field'"
+                        [placeholder]="'https://saydept.com/say'"
+                        [value]="paramModel.urlFieldVal"
+                    >
+                    </ExtUrlfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="false"
+                        [label]="'checkBox'"
+                        name="checkVal"
+                        [inputValue]=""
+                        (change)="onChangeCheck($event)"
+                    >
+                    </ExtCheckbox>
+                    <ExtEmailfield
+                        [label]="'Email Field'"
+                        [placeholder]="'ygit@ssof.com'"
+                        [value]="paramModel.emailFieldVal"
+                    >
+                    </ExtEmailfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtTogglefield
+                        [label]="'toggle'"
+                        [value]="false"
+                        (change)="onChangeToggle($event)"
+                    ></ExtTogglefield>
+                    <ExtNumberfield
+                        [label]="'Number Field'"
+                        [placeholder]="'number'"
+                        [value]="paramModel.numFieldVal"
+                    >
+                    </ExtNumberfield>
+                </ExtFieldset> 
+            </ExtFormpanel>
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'"  
+            [flex]="1"
+        >
+
+            <!-- main left -->
+            <ExtPanel 
+                [weight]="10"
+                docked="left"
+                [flex]="1"
+                width="450"
+                [maxWidth]="'80%'"
+                [resizable]="{edges: 'east', dynamic: true}"
+                [border]="true"
+            >
+                <ExtContainer layout="fit" fitToParent="true">
+                    <ExtTree
+                        (ready)="onReadyTree($event)"
+                        [store]="treeStore"
+                        [shadow]="false"
+                        [flex]="1"
+                    >
+                    </ExtTree>
+                </ExtContainer>
+            </ExtPanel>
+
+            <!-- main center -->
+            <ExtPanel
+                [flex]="1"
+                [layout]="'fit'"
+                [height]="'100%'"
+                [border]="true"
+            >
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{ gridfilters: true }"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                        text="column1"
+                        dataIndex="data mapping key"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="column2"
+                        dataIndex="data mapping key"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="column3"
+                        formatter='number("0,000")'
+                        dataIndex="data mapping key"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="column4"
+                        dataIndex="data mapping key"
+                    >
+                    </ExtGridcolumn>
+                    <ExtToolbar docked="bottom">
+                        <ExtButton 
+                            [align]="'left'" 
+                            iconCls="x-fa fa-chevron-left" 
+                        >
+                        </ExtButton>
+
+                        <ExtLabel html=""></ExtLabel>
+                        <ExtSliderfield
+                            [padding]="'0 5'"
+                            [minValue]="25"
+                            [maxValue]="2000"
+                            [increment]="10"
+                            flex="1"
+                        >
+                        </ExtSliderfield>
+                        <ExtButton 
+                            [align]="'right'" 
+                            iconCls="x-fa fa-chevron-right" 
+                        >
+                        </ExtButton>
+                    </ExtToolbar>
+                </ExtGrid>
+                
+            </ExtPanel>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

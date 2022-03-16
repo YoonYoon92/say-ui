@@ -1,0 +1,116 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+<ExtTitlebar
+    [title]="route.text"
+    docked="top"
+    [platformConfig]="{ 
+        phone   : { titleAlign: 'center' } 
+    ,   desktop : { titleAlign: 'left' }
+    }"
+>
+
+</ExtTitlebar>
+
+<!-- contnent-->
+    <ExtPanel  
+    [shadow]="true" 
+    [layout]="{ type: 'hbox', align: 'strech' }"
+    [border]="false"
+    [scrollable]="true"
+>
+    <!-- main area -->
+    <ExtPanel  
+        [layout]="'fit'"  
+        [flex]="1"
+    >
+        <ExtContainer  [layout]="'center'" style ="background-color:#5e7e99"  [flex]="1">
+            <ExtFormpanel
+                [shadow]="true"
+            >
+                <ExtFieldset
+                    [title]="''"
+                    [width]="'fit'"
+                    [layout]="{ type: 'hbox', align: 'strech' }"
+                >   
+                    <ExtDatefield
+                        (ready)="onReadystartDt($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >  
+                    </ExtDatefield>
+                    <ExtComponent [width]="50"></ExtComponent>
+                    <ExtCombobox
+                        [label]="'  점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="jumComboVal"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+                    <ExtComponent [width]="50"></ExtComponent>
+                    <ExtCombobox
+                            [label]="'부'"
+                            [store]="comboStoreLv2"
+                            [placeholder]="'선택하세요'"
+                            [valueField]="'storeLvCd'"
+                            [displayField]="'storeLvNm'"
+                            [queryMode]="'local'"
+                            [clearable]="true"
+                            [editable]="false"
+                            (change)="comboStoreLv2Event($event)"
+                        >
+                    </ExtCombobox>
+                    <ExtComponent [width]="50"></ExtComponent>
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtComponent [width]="50"></ExtComponent>
+                    
+                </ExtFieldset>
+                        <ExtButton 
+                            [text]="'팀별엑셀'"
+                            (tap)="onTapExcel1($event)"
+                            ui="action raised"
+                        >
+                        </ExtButton>
+                        <ExtButton 
+                            [text]="'존별엑셀'"
+                            (tap)="onTapExcel2($event)"
+                            ui="action raised"
+                        >
+                        </ExtButton>
+                        <ExtButton 
+                            [text]="'날짜별엑셀'"
+                            (tap)="onTapExcel3($event)"
+                            ui="action raised"
+                        >
+                        </ExtButton>
+            </ExtFormpanel>
+        </ExtContainer>    
+    </ExtPanel>
+</ExtPanel>
+</ExtContainer>

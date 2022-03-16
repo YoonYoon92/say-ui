@@ -1,0 +1,316 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            (tap)="onTitleTap($event)"
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-csv"
+            (tap)="onTapCsv($event)"
+            tooltip="Csv DownLoad"
+        ></ExtButton>
+       
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDay"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDayTo"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="종료일"
+                        [editable]="false"
+                        (change)="onChangeStartDtTo($event)"
+                    >
+                    </ExtDatefield>
+                    
+
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="'01'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+
+        <!--pdf조회용-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "pdfpanel"  
+            hidden = "1"         
+        >
+        <iframe #extitem [src]="pdfUrl" style="width: 100%;" id="pdfFrame"></iframe>
+        </ExtPanel>
+
+        <!--화면조회용-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "schpanel"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{
+                        summaryrow: true
+                        ,gridfilters: true 
+                    }"
+                    [groupFooter]="{
+                        xtype: 'gridsummaryrow'
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+                <ExtGridcolumn 
+                text="점"
+                width="150"
+                [align]="'center'"
+                dataIndex="jumNm"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부"
+                   
+                    [align]="'center'"
+                    dataIndex="buNm"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="팀"
+                    
+                    [align]="'center'"
+                    dataIndex="timNm"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="PC"
+                    
+                    [align]="'center'"
+                    dataIndex="pcNm"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="코너번호"
+                    [align]="'center'"
+                    dataIndex="cls"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="코너명"
+                    width="200"
+                    [align]="'left'"
+                    dataIndex="clsNm"
+                >
+            </ExtGridcolumn>
+            <ExtGridcolumn 
+            text="건수"
+            xtype= 'column'
+            width="100"
+            [align]="'right'"
+            dataIndex="ddCnt"
+            summary='sum'
+            summaryFormatter='number("000,000")'
+            [renderer]="this.renderSignNormal"
+        >
+        </ExtGridcolumn>
+        <ExtGridcolumn 
+            text="현금"
+            xtype= 'column'
+            width="120"
+            [align]="'right'"
+            dataIndex="ddCash"
+            summary='sum'
+            summaryFormatter='number("000,000")'
+            [renderer]="this.renderSignNormal"
+        >
+        </ExtGridcolumn>
+        
+        <ExtGridcolumn 
+            text="카드"
+            xtype= 'column'
+            width="120"
+            [align]="'right'"
+            dataIndex="ddCard"
+            summary='sum'
+            summaryFormatter='number("000,000")'
+            [renderer]="this.renderSignNormal"
+        >
+        </ExtGridcolumn>
+        <ExtGridcolumn 
+            text="기타"
+            xtype= 'column'
+            width="120"
+            [align]="'right'"
+            dataIndex="ddOther"
+            summary='sum'
+            summaryFormatter='number("000,000")'
+            [renderer]="this.renderSignNormal"
+        >
+        </ExtGridcolumn>
+        <ExtGridcolumn 
+            text="순매출"
+            xtype= 'column'
+            width="120"
+            [align]="'right'"
+            dataIndex="ddNetsale"
+            summary='sum'
+            summaryFormatter='number("000,000")'
+            [renderer]="this.renderSignNormal"
+            
+        >
+                </ExtGridcolumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

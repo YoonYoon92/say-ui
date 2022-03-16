@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-12">
+        <!-- <div class="card border-left-info shadow h-100 py-2"> -->
+        <div class="card shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col-8">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1" *ngIf="data.title !== 'none'">
+                            {{data.dayInfo}}
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800" *ngIf="data.title === 'none' else title">
+                            <i class="fa fa-spinner fa-spin"></i>Loding...
+                        </div>
+                        <ng-template #title>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                {{data.title}}
+                            </div>
+                        </ng-template>
+                        <div class="h5 mb-0 font-weight-bold" style="color: #9b9b9b;">
+                            {{data.value}}
+                        </div>
+                        <!-- <div class="text-xs text-uppercase mb-1" style="color: #9b9b9b;" *ngIf="data.title !== 'none'">
+                            123/11%
+                        </div> -->
+                    </div>
+                    <div class="col-auto" style="height: 100px;">
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300" style="margin-top: 25px; margin-left: 70px;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

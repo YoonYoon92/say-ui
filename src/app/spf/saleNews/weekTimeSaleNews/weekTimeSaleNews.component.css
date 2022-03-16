@@ -1,0 +1,6 @@
+.later .x-grid-cell {
+  background-color: #FFB0C4 !important;
+}
+.now .x-grid-cell {
+  background-color: #5491BD !important;
+}

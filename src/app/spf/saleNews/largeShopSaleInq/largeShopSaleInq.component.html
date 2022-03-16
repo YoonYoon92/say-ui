@@ -1,0 +1,302 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadystartDt($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                   
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                
+                <ExtTextfield
+                height ="100px"
+                label = ""
+                value = "[ 단위: 천원,  % ]"
+                [textAlign]="'right'"
+                disabled="true"
+                >
+                </ExtTextfield>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{
+                        summaryrow: true
+                        ,gridfilters: true 
+                    }"
+                    [groupFooter]="{
+                        xtype: 'gridsummaryrow'
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                        width='160px'   
+                        text="팀명"
+                        filter="string"
+                        dataIndex="timNm"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        width='160px'    
+                        text="코너명"
+                        filter="string"
+                        dataIndex="conerNm"
+                    >
+                    </ExtGridcolumn>
+                   
+                    <ExtColumn 
+                    text="당 일"
+                    [columns]="days"
+                    >
+                        <ExtGridcolumn 
+                        text="목표"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="ddTry"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum'
+                        summaryFormatter='number("0,000")'
+                        
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="매출"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="ddSplan"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum' 
+                        summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="달성율"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="ddAchivmentrate"
+                        width="120"
+                        [renderer]="this.renderSignRate"
+                        summary = 'average'
+                        summaryFormatter='number("000.00%")'
+                        
+                        >
+                        </ExtGridcolumn>
+                        
+                    </ExtColumn>
+                    <ExtColumn 
+                    width='10'
+                    >
+                    </ExtColumn>
+                    <ExtColumn 
+                    text="당 월"
+                    [columns]="days"
+                    >
+                        <ExtGridcolumn 
+                        text="목표"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="mmTry"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum' 
+                        summaryFormatter='number("0,000")'
+                        
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="매출"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="mmSplan"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum' 
+                        summaryFormatter='number("0,000")'
+                        
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="달성율"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="mmAchivmentrate"
+                        width="120"
+                        [renderer]="this.renderSignRate"
+                        summary = 'average'
+                        summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+
+                        </ExtColumn>
+                        <ExtColumn 
+                        width='10'
+                        >
+                        </ExtColumn>        
+                    <ExtColumn 
+                    text="당 년"
+                    [columns]="days"
+                    >
+                        <ExtGridcolumn 
+                        text="목표"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="yyTry"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum' 
+                        summaryFormatter='number("0,000")'
+                       
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="매출"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="yySplan"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        summary = 'sum' 
+                        summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="달성율"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="yyAchivmentrate"
+                        width="120"
+                        [renderer]="this.renderSignRate"
+                        summary = 'average'
+			            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

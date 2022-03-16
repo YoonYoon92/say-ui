@@ -1,0 +1,21 @@
+export class RcptNoDanPumInqSearch {
+	jum			   : string; //점
+	frDate			: String; //영수증조회날짜
+	// maeDate			: String; //영수증조회날짜
+	regiNo			: String; //영수증조회레지
+	regiNm			: String; //영수증조회이름
+	rcptNo			: String; //영수증리턴 
+	
+	// bu             : string; //부
+	// pc             : String; //pc
+	// pcNm           : String; //pc        
+	// eventcd1       : String; //행사지역코드
+	// eventcd2       : String; //행사일련번호
+	// eventNm        : String; //이벤트명
+	// eventstartDt   : String; //이벤트시작일
+	// eventendDt     : String; //이벤트종요일
+	// startDt 	   : string; //시작일
+    // endDt   	   : string; //종료일
+	
+  
+ }

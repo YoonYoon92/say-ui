@@ -1,0 +1,301 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            (tap)="onTitleTap($event)"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+      
+
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadystartDt($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="시작일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtDatefield
+                        (ready)="onReadyendDt($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="종료일"
+                        [editable]="false"
+                        (change)="onChangeEndDt($event)"
+                    >
+                    </ExtDatefield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                <ExtCombobox
+                [label]="'점'"
+                [store]="comboStoreLv1"
+                [value]="'01'"
+                [placeholder]="'선택하세요'"
+                [valueField]="'storeLvCd'"
+                [displayField]="'storeLvNm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                (change)="comboStoreLv1Event($event)"
+            >
+                </ExtCombobox>
+
+                <ExtCombobox
+                [label]="'존'"
+                [store]="ZoneStore"
+                [placeholder]="'먼저부서를 선택하세요'"
+                [valueField]="'zoneCd'"
+                [displayField]="'zoneNm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                (change)="zoneStoreEvent($event)"
+            >
+                </ExtCombobox>
+                  
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                <ExtCombobox
+                [label]="'부'"
+                [store]="comboStoreLv2"
+                [placeholder]="'선택하세요'"
+                [valueField]="'storeLvCd'"
+                [displayField]="'storeLvNm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [editable]="false"
+                (change)="comboStoreLv2Event($event)"
+                >
+                </ExtCombobox>
+                <ExtCombobox
+                [width]="200"
+                [label]="'출력구분'"
+                [store]="comboOnStore"
+                [value]="'ONF'"
+                [placeholder]="'온라인포함'"
+                [valueField]="'onlinechk'"
+                [displayField]="'onlinechkNm'"
+                [queryMode]="'local'"
+                [labelAlign]="'placeholder'"
+                [clearable]="true"
+                [editable]="false"
+                (change)="onChangeComboBox($event)"
+                >
+                </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFormpanel
+                [layout]="'form'"
+                [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtCheckbox 
+                        [label]="'달성율미달성'"
+                        [checked]="false"
+                        [value]="'AchivmentrateCheck'"
+                        (change)="AchivmentrateCheckbox($event)"
+                    >
+                    </ExtCheckbox>
+
+                    <ExtTextfield
+                    height="50px"
+                    label = ""
+                    value = "[ 단위: 천원 , % ]"
+                    [textAlign]="'right'"
+                    disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFormpanel>
+               
+            </ExtFormpanel>
+
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            [scrollable]="true"
+        >
+        <div #extitem style="width: 100%; height: 100%;">
+            <table class="table  table-striped table-bordered table-sm">
+         
+            <tbody>
+                  
+                        
+
+
+                    <th scope="col" align="right"  *ngFor="let  item1 of yeartitle; let i = index">
+                        {{item1}}                    
+                        <ng-container [ngSwitch]="item1">
+                            <ng-container width="150" *ngSwitchCase="'당년'">            
+                            <tr>
+                            <td scope="row" width="50">{{inqSeq[0]}}</td>
+                            <td scope="row" width="150">{{inqSeq[1]}}</td>
+                            <td scope="row" align="center" width="150">{{inqSeq[2]}}</td>
+                            <td scope="row" align="center" width="150">{{inqSeq[3]}}</td>
+                            <td scope="row" align="center" width="70">{{inqSeq[4]}}</td>
+                            <td scope="row"align="center" width="70">{{inqSeq[5]}}</td>    
+                            <td scope="row"align="center" width="100">{{inqSeq[6]}}</td>
+                            <td scope="row"align="center" width="100">{{inqSeq[7]}}</td>                        
+                            </tr>  
+                            </ng-container>     
+                            <ng-container *ngSwitchCase="'전년'">
+                                <tr>
+                                    <td scope="row"width="150">{{inqSeq[1]}}</td>
+                                    <td scope="row" align="center" width="150">{{inqSeq[2]}}</td>
+                                    <td scope="row" align="center" width="150">{{inqSeq[3]}}</td>
+                                    <td scope="row" align="center" width="70">{{inqSeq[4]}}</td>
+                                    <td scope="row" align="center" width="70">{{inqSeq[5]}}</td>    
+                                    <td scope="row" align="center" width="100">{{inqSeq[6]}}</td>
+                            </tr>  
+                            </ng-container>
+                        </ng-container>
+
+                        <ng-container [ngSwitch]="item1">
+                            <ng-container *ngSwitchCase="'당년'" > 
+                            <tr *ngFor="let item of PcModel; let i = index">                                        
+                                <td scope="row" width="fit">{{i+1}}</td>
+                                <td scope="row" width="fit">{{item.conerNm}}</td>
+                                <td scope="row" align="right" width="fit"><span [ngStyle]="{'color':item.try < 0 ? 'red' :'black'  } ">{{item.try|number}}</span></td>
+                                <td scope="row" align="right" width="fit" ><span [ngStyle]="{'color':item.splan < 0 ? 'red' :'black'  } ">{{item.splan|number}}</span></td>
+                                <td scope="row" align="right" width="fit"><span [ngStyle]="{'color':item.co < 0 ? 'red' :'black'  } ">{{item.co|number}}</span></td>
+                                <td scope="row" align="right" width="fit"><span [ngStyle]="{'color':item.dcnt < 0 ? 'red' :'black'  } ">{{item.dcnt|number}}</span></td>
+                                <td scope="row" align="right" width="fit"><span [ngStyle]="{'color':item.achivmentrate < 0 ? 'red' :'black'  } ">{{item.achivmentrate/100|percent:'3.2-2'}}</span></td>
+                                <td scope="row" align="right" ><span [ngStyle]="{'color':item.incrsrate < 0 ? 'red' :'black'  } ">{{item.incrsrate/100|percent:'3.2-2'}}</span></td>   
+                            </tr>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'전년'" > 
+                                <tr *ngFor="let item of PcModel; let i = index">                
+                                    <td scope="row" width="fit">{{item.conerNm}}</td>
+                                    <td scope="row" align="right" ><span [ngStyle]="{'color':item.lastyearTry < 0 ? 'red' :'black'  } ">{{item.lastyearTry|number}}</span></td>
+                                    <td scope="row" align="right"  ><span [ngStyle]="{'color':item.lastyearSplan < 0 ? 'red' :'black'  } ">{{item.lastyearSplan|number}}</span></td>
+                                    <td scope="row" align="right" ><span [ngStyle]="{'color':item.lastyearCo < 0 ? 'red' :'black'  } ">{{item.lastyearCo|number}}</span></td>
+                                    <td scope="row" align="right" ><span [ngStyle]="{'color':item.lastyearDcnt < 0 ? 'red' :'black'  } ">{{item.lastyearDcnt|number}}</span></td>
+                                    <td scope="row" align="right" ><span [ngStyle]="{'color':item.lastyearAchivmentrate < 0 ? 'red' :'black'  } ">{{item.lastyearAchivmentrate/100|percent:'3.2-2'}}</span></td>
+                                </tr>
+                                
+                            </ng-container>
+    
+                            </ng-container>
+
+                            
+            </tbody>
+            </table>
+        </div>
+        </ExtPanel>
+        
+    </ExtPanel>
+    
+</ExtContainer>

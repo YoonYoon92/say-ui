@@ -1,0 +1,74 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="false"
+        [scrollable]="true"
+    >
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'"  
+            [flex]="1"
+        >
+            <ExtContainer  [layout]="'center'" style ="background-color:#5e7e99"  [flex]="1">
+                <ExtFormpanel
+                    [shadow]="true"
+                >                    
+                    <ExtFieldset
+                        [title]="''"
+                        [instructions]="'   '"
+                        [width]="300"
+                    >
+                        <ExtTextfield
+                            [label]="'현재 비밀번호 입력'"
+                            [labelAlign]="'placeholder'"
+                            (change)="onChangePassword0($event)"
+                        ></ExtTextfield>
+                    </ExtFieldset>
+                
+                    <ExtFieldset
+                        [title]="''"
+                        [instructions]="'   패스워드는 아이디와 다르게 입력해야 합니다.'"
+                        [width]="300"
+                    >
+                        <ExtPasswordfield
+                            [label]="'변경 비밀번호 입력'"
+                            [labelAlign]="'placeholder'"
+                            (change)="onChangePassword1($event)"
+                        ></ExtPasswordfield>
+                        <ExtPasswordfield
+                            [label]="'변경 비밀번호 확인'"
+                            [labelAlign]="'placeholder'"
+                            (change)="onChangePassword2($event)"
+                        ></ExtPasswordfield>
+                    </ExtFieldset>
+                    <ExtButton 
+                        [text]="'적용'"
+                        (tap)="passwordSave($event)"
+                        ui="action raised"
+                    >
+                    </ExtButton>
+                </ExtFormpanel>
+            </ExtContainer>    
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

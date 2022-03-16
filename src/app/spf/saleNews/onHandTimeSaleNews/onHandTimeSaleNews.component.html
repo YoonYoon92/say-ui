@@ -1,0 +1,377 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+       
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtPanel  
+    [shadow]="true" 
+    [layout]="{ type: 'vbox', align: 'strech' }"
+    [border]="true"
+    [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDay"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d(D)'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="storeCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox> 
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>      
+                    <!-- <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, % ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield> -->
+
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- 일매출 목표/실적/달성율 -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+            [layout]="{
+                type: 'box',
+                vertical: false
+            }"
+            >   
+                <!-- First line -->
+                <ExtContainer
+                        [autoSize]="false"
+                        [defaults]="{flex: 1, bodyPadding: 1, shadow: false, margin: 1 }"
+                        [layout]="{type: isPhone ? 'vbox' : 'hbox', pack: 'center', align: 'stretch'}"
+                        [flex]="1"
+                    >
+                        <ExtPanel  
+                            [title]="'일 목 표'"
+                            [titleAlign]="'center'" 
+                            [html]="this.dayGoal"
+                            [height]="100" >
+                        </ExtPanel>
+                        <ExtPanel  
+                            [title]="'일 실 적'" 
+                            [titleAlign]="'center'"
+                            [html]="this.daySaleAmount" 
+                            [height]="100">
+                        </ExtPanel>
+                        <ExtPanel  
+                            [title]="'달 성 율'" 
+                            [titleAlign]="'center'"
+                            [html]="this.achievementRate" 
+                            [height]="100">
+                        </ExtPanel>
+                    </ExtContainer>
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <!-- <ExtTextfield
+                        label = "▶ 일 목 표"
+                        [value] = "this.dayGoal"
+                        [textAlign]="'right'"
+                        disabled="true"                        
+                    >
+                    </ExtTextfield> -->
+                    
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <!-- <ExtComponent [width]="10"></ExtComponent> -->
+
+                <!-- Second line -->
+                <!-- <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtTextfield
+                    label = "▶ 일 실 적"
+                    [value] = "this.daySaleAmount"
+                    [textAlign]="'right'"
+                    disabled="true"
+                    >
+                    </ExtTextfield>
+
+
+                </ExtFieldset> -->
+
+                <!-- 필드간 좌우 간격  -->
+                <!-- <ExtComponent [width]="10"></ExtComponent> -->
+
+                <!-- Third line -->
+                <!-- <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtTextfield
+                    label = "▶ 달 성 율"
+                    [value] = "this.achievementRate"
+                    [textAlign]="'right'"
+                    disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset> -->
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >  
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, % ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+
+                </ExtFieldset> 
+            </ExtFormpanel>
+        </ExtPanel>
+
+
+        <!-- main center area -->
+        <ExtPanel  
+            [layout]="'fit'"
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [sortable]="false"
+                    [selectable]="false"
+                    [disableSelection]="true"
+                    [columnMenu]="false"
+                    [enableColumnMove]="false"                    
+                    [axisLock]="true"       
+                    [plugins]="{ gridfilters: true }"           
+                >
+
+                    <ExtGridcolumn 
+                        text="시간대"
+                        [align]="'center'"
+                        dataIndex="division"
+                    >
+                    </ExtGridcolumn>
+                    <ExtColumn 
+                        text="시      재"
+                        [columns]="week"
+                    >
+
+                        <ExtGridcolumn 
+                        text="현금"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="cashAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="크래디트"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="cardAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="상품권"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="giftAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="기타"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="etcAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="총매출액"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="totalSaleAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="할인"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="discountAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                        text="순매출액"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="netSaleAmount"
+                        width="120"
+                        [renderer]="this.renderSign"
+                        >
+                        </ExtGridcolumn>
+                        
+                        <ExtGridcolumn 
+                        text="고객수"
+                        xtype= 'column'
+                        [align]="'right'"
+                        dataIndex="customCount"
+                        width="120"
+                        [renderer]="this.renderSignCustom"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>                       
+                </ExtGrid>
+
+            </ExtContainer>
+           
+        </ExtPanel>
+
+    </ExtPanel>
+</ExtContainer>

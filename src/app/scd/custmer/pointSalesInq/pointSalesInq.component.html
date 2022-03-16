@@ -1,0 +1,281 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+      
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtTextfield
+                        [placeholder]="''"
+                        [label]="'회원번호'"
+                        [value]="paramModel.searchPoint"
+                        [required]="false"
+                        [clearable]="false"
+                        [maxLength]="9"
+                        [autoHideInputMask] = "true"
+                        [inputMask]="'99-999999-9'"
+                        (change)="onChangesearchPoint($event)"
+                        >
+                    </ExtTextfield>
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtNumberfield
+                        [placeholder]="''"
+                        [label]="'조회년월'"
+                        [value]="paramModel.searchDt"
+                        [required]="false"
+                        [clearable]="false"
+                        [maxLength]="6"
+                        formatter = 'number("000000")'
+                        (change)="onChangesearchDt($event)"
+                        >
+                    </ExtNumberfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'회원명'"
+                    [value]="pointInform.pointNm"
+                    [required]="false"
+                    [clearable]="false"
+                    [editable]="false"
+                    >
+                </ExtTextfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'합계포인트'"
+                    [value]="pointInform.pointScore"
+                    formatter = 'number("0,000")'
+                    [required]="false"
+                    [clearable]="false"
+                    [editable]="false"
+                    >
+                </ExtTextfield>
+                <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'소실포인트'"
+                    [value]="pointInform.lostPoint"
+                    formatter = 'number("0,000")'
+                    [required]="false"
+                    [clearable]="false"
+                    [editable]="false"
+                    >
+                </ExtTextfield>
+                    
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [scrollable]="true"
+                    [store]="pointSaleList"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                        text="매출일자/시간"
+                        width="150"
+                        dataIndex="saleDt"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="매출구분"
+                        dataIndex="saleDiv"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="포스번호"
+                        dataIndex="posNum"
+                        width="80"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="영수증번호"
+                        dataIndex="receipt"
+                        [align]="'right'"
+                        width="90"
+                    >
+                    </ExtGridcolumn>
+                    
+                    <ExtGridcolumn 
+                        text="코너명"
+                        dataIndex="clsNm"
+                        width="150"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="카드매출"
+                        dataIndex="cardSale"
+                        
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="카드 적립포인트"
+                        width="130"
+                        dataIndex="cardPoint"
+                        
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="현금매출"
+                        dataIndex="cashSale"
+                        
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="현금 적립포인트"
+                        width="130"
+                        dataIndex="cashPoint"
+                     
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="총 순매출"
+                        dataIndex="netSale"
+                       
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="총 적립포인트"
+                        width="130"
+                        dataIndex="salePoint"
+                      
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="누계 포인트"
+                        width="130"
+                        dataIndex="totPoint"
+                     
+                        [align]="'right'"
+                        [renderer]="this.renderPercentCell"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="반품여부"
+                        width="80"
+                        dataIndex="saleReturn"
+                        [align]="'center'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="매출반영여부"
+                        width="130"
+                        dataIndex="saleUpate"
+                        [align]="'center'"
+                    >
+                    </ExtGridcolumn>
+                    
+                    
+                   
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

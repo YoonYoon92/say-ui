@@ -1,0 +1,296 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+       
+      
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <!-- <ExtDatefield
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m'"
+                        [dataType]="'Y/M'"
+                        label="시작일"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield> -->
+                <ExtNumberfield
+                [placeholder]="''"
+                [label]="'기준 조회년월'"
+                [value]="paramModel.searchDt"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="6"
+                formatter = 'number("000000")'
+            
+                (change)="onChangesearchDt($event)"
+                >
+                </ExtNumberfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'조회구분'"
+                        [store]="searchStore"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'searchCd'"
+                        [displayField]="'searchNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="onChangeSearchCd($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [hidden]="true"
+                        text="searchShowing"
+                        (ready)="onSearchShowing($event)"
+                        [label]="'상권구분'"
+                        [store]="tradingAreaStore"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'tradingAreaCd'"
+                        [displayField]="'tradingAreaNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="onChangeTradingArea($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [hidden]="true"
+                        [label]="'지역구분'"
+                        text="searchShowing2"
+                        (ready)="onSearchShowing2($event)"
+                        [store]="areaStore"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'areaCd'"
+                        [displayField]="'areaNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="onChangeArea($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '60px'
+                    }"
+                    [plugins]="{ gridfilters: true }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    (select)="onSelectGrid($event)"
+                >
+                    <!-- number("0,000") 천단위 콤마 -->
+                    <ExtGridcolumn 
+                        text="상권명"
+                        filter="string"
+                        (ready)="onTradingShowing($event)"
+                        dataIndex="tradingAreaNm"
+                        width="300px"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [hidden]='true'
+                        filter="string"
+                        (ready)="onApartShowing($event)"
+                        text="아파트명"
+                        dataIndex="tradingAreaNm"
+                        width="300px"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코드"
+                        filter="string"
+                        (ready)="onTradingShowing2($event)"
+                        dataIndex="tradingAreaCd"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        [hidden]='true'
+                        filter="string"
+                        (ready)="onApartShowing2($event)"
+                        text="세대수"
+                        dataIndex="tradingAreaCd"
+
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="C/D회원"
+                        filter="number"
+                        formatter='number("0,000")'
+                        dataIndex="cdMember"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="분포율"
+                        filter="number"
+                        formatter='number("000.00%")'
+                        dataIndex="cdRate"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="PLUS 회원"
+                        filter="number"
+                        filter="number"
+                        formatter='number("0,000")'
+                        dataIndex="plusMember"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="분포율"
+                        filter="number"
+                        formatter='number("000.00%")'
+                        dataIndex="plusRate"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="이용회원"
+                        filter="number"
+                        formatter='number("0,000")'
+                        dataIndex="useMember"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="분포율"
+                        filter="number"
+                        formatter='number("000.00%")'
+                        dataIndex="useRate"
+                        [align]="'right'"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        filter="number"
+                        text="이용회원 매출액"
+                        formatter='number("0,000")'
+                        dataIndex="memberAmt"
+                        [align]="'right'"
+                        width="150px"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        filter="number"
+                        text="이용회원 매출구성비"
+                        formatter='number("000.00%")'
+                        dataIndex="memberAmtRate"
+                        [align]="'right'"
+                        width="150px"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        filter="number"
+                        text="객단가"
+                        formatter='number("0,000")'
+                        dataIndex="memberPrice"
+                        [align]="'right'"
+                        width="150px"
+                    >
+                    </ExtGridcolumn>
+
+                  
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

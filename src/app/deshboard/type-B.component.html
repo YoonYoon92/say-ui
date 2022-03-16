@@ -1,0 +1,217 @@
+<ExtContainer layout="fit" fitToParent="true">
+    <ExtPanel  
+        [scrollable]="true"
+    >
+        <!-- Line.1 -->
+        <ExtContainer 
+            layout="fit" 
+            flex="1" 
+        >
+            <ExtPanel  
+                [layout]="{ 
+                    type: 'hbox', 
+                    align: 'strech' 
+                }" 
+            >
+                <!--일매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-primary (testClick)="myTestClick($event)" [data]="dailySale"></widget-alert-primary>
+                    </div>
+                </ExtContainer>
+
+                <!--월매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1"
+                    [padding]="padding" 
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-success (testClick)="myTestClick($event)" [data]="monthlySale"></widget-alert-success>
+                    </div>
+                </ExtContainer>
+
+                <!--년매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-warning [data]="annualSale"></widget-alert-warning>
+                    </div>
+                </ExtContainer>
+
+                <!--온라인 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-info [data]="onlineSale"></widget-alert-info>
+                    </div>
+                </ExtContainer>
+            </ExtPanel>
+        </ExtContainer>
+
+        <ExtContainer 
+            layout="fit" 
+            flex="1" 
+            [padding]="padding"
+        >
+            <!-- Line 2 -->
+            <ExtPanel  
+                [layout]="'fit'"  
+                [flex]="1"
+                [height]="675"
+            >
+                <!--우측 라인 차트-->
+                <ExtPanel 
+                    [flex]="1"
+                    [maxWidth]="'65%'"
+                    [minWidth]="'65%'"
+                >
+                    <div #extitem class="card" style="width: 100%; height: 100%; margin-right: 10px;">
+                        <div class="collapse show" id="lineChartCard">
+                            <div class="card-body">
+                                <widget-chartJs-line [lineModel]="lineChart"></widget-chartJs-line>
+                            </div>
+                        </div>
+                    </div>
+                </ExtPanel>
+
+                <!-- 왼쪽 파이 및 날씨 -->
+                <ExtPanel  
+                    [shadow]="false" 
+                    [layout]="{ type: 'vbox', align: 'strech' }"
+                    [padding] = "'0 0 0 2'"
+                
+                >
+                    <!--행사장-->
+                    <ExtPanel 
+                        [flex]="1"
+                        [maxHeight]="'55%'"
+                        [minHeight]="'55%'"
+                    >
+                        <div #extitem class="card" style="width: 100%; height: 100%;">
+                            <div class="card-body">
+                                <widget-chartJs-doughnut [douctModel]="douctChart"></widget-chartJs-doughnut>
+                            </div>
+                        </div>
+                    </ExtPanel>
+
+                    <!--날씨-->
+                    <ExtPanel
+                        [flex]="1"
+                        [maxHeight]="'45%'"
+                        [minHeight]="'45%'"
+                        [padding] = "'2 0 0 0'"
+                    >
+                        <div #extitem class="card card-weather" style="width: 100%; height: 100%;">
+                            <div class="card-body " *ngIf="weatherMap === undefined else weather">
+                                <div class="weather-date-location">
+                                    <h3><i class="fa fa-spinner fa-spin"></i>Loding...</h3>
+                                </div>
+                                <div class="weather-data d-flex">
+                                    <div class="d-flex weakly-weather" style=" margin-left: 40px; width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #weather>
+                                <div class="card-body ">
+                                    <div class="weather-date-location">
+                                        <h3>{{monthNm}}월 {{dayNm}}일 {{weekNm}}요일</h3>
+                                        <p class="text-gray"> 
+                                            <span class="weather-location"  [ngStyle]="{'font-size': '2rem', 'color':this.envService.kToc(weatherMap.current.temp) > 0?'red':'blue'}">
+                                                {{this.envService.kToc(weatherMap.current.temp)}}
+                                                <i class="wi wi-celsius"></i>
+                                            </span>
+                                            &nbsp;
+                                            <ng-container *ngIf="weatherMap.current.rain !== undefined">
+                                                <i class="wi wi-umbrella" style="font-size: 1rem; color: #924da3;"></i>
+                                                <span style="font-size: 0.8rem; font-weight: bold">
+                                                    {{weatherMap.current.rain}}%
+                                                </span>
+                                            </ng-container>
+                                            <ng-container *ngIf="weatherMap.current.snow !== undefined">
+                                                <i class="wi wi-snowflake-cold" style="font-size: 1rem; color: #924da3;"></i>
+                                                <span style="font-size: 0.8rem; font-weight: bold">
+                                                    {{weatherMap.current.snow}}%
+                                                </span>
+                                            </ng-container>
+                                            <ng-container *ngIf="weatherMap.current.humidity !== undefined">
+                                                <i class="wi wi-humidity" style="font-size: 1rem; color: #924da3;"></i>
+                                                <span style="font-size: 0.8rem; font-weight: bold">
+                                                    {{weatherMap.current.humidity}}%
+                                                </span>
+                                            </ng-container>
+                                            
+                                        </p>
+                                        <div style="text-align: right; margin-top: -110px;">
+                                            <h6 class="display-4">
+                                                <i [class]="this.envService.weatherIcon(weatherMap.current.weather[0].icon)"></i>
+                                                <p class="text-gray" style="margin-top: 10px; font-weight: bold;"> 
+                                                    <span class="weather-location">
+                                                        {{weatherMap.current.weather[0].description}}
+                                                    </span> 
+                                                </p>
+                                            </h6>
+                                        </div>
+                                        <p class="text-gray"> <span class="weather-location"></span> </p>
+                                    </div>
+                                    <div class="weather-data d-flex" style=" margin-bottom: 50px;">
+                                        <div class="d-flex weakly-weather" style="width: 100%;">
+                                            <ng-container *ngFor="let item of weatherMap.daily; let i = index">
+                                                <div class="weakly-weather-item" *ngIf="i >= 1 && i <= 5">
+                                                    <p class="mb-0" style="font-weight: bold;"> {{this.envService.dayOfWeek(i)}}</p> 
+                                                    <i [class]="this.envService.weatherIcon(item.weather[0].icon)" style="margin-top: 5px; margin-bottom: 10px; font-size: 2rem;"></i><br>
+                                                    <p class="mb-0" style="font-size: 0.8rem; font-weight: bold"> 
+                                                        {{this.envService.kToc(item.temp.min)}}°
+                                                        / 
+                                                        {{this.envService.kToc(item.temp.max)}}°
+                                                    </p>
+                                                    <p class="mb-0" > 
+                                                        <ng-container *ngIf="item.rain !== undefined else snow">
+                                                            <!-- 강수 -->
+                                                            <i class="wi wi-umbrella" style="font-size: 1rem; color: #924da3;"></i>
+                                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                                {{item.rain}}㎜
+                                                            </span>
+                                                            
+                                                        </ng-container>
+                                                        <ng-template #snow>
+                                                            <ng-container *ngIf="item.snow !== undefined else humidity">
+                                                                <!-- 눈 -->
+                                                                <i class="wi wi-snowflake-cold" style="font-size: 1rem; color: #924da3;"></i>
+                                                                <span style="font-size: 0.8rem; font-weight: bold">
+                                                                    {{item.snow}}㎜
+                                                                </span>
+                                                            </ng-container>
+                                                        </ng-template>
+                                                        <ng-template #humidity>
+                                                            <!-- 습도 -->
+                                                            <i class="wi wi-humidity" style="font-size: 1rem; color: #924da3;"></i>
+                                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                                {{item.humidity}}%
+                                                            </span>
+                                                        </ng-template>
+                                                    </p>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template> 
+                        </div>
+                    </ExtPanel>
+                </ExtPanel>
+            </ExtPanel>
+        </ExtContainer>          
+    </ExtPanel>
+</ExtContainer>
+        

@@ -1,0 +1,482 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapPdf($event)"
+            text="pdf" 
+            tooltip="pdf DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-csv"
+            (tap)="onTapCsv($event)"
+            tooltip="csv DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+            [shadow]="true" 
+            [layout]="{ type: 'vbox', align: 'strech' }"
+            [border]="true"
+            [scrollable]="true"
+        >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchFromDay($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="시작일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtDatefield
+                        (ready)="onReadysearchToDay($event)"
+                        [value]="endDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="종료일"
+                        [editable]="false"
+                        (change)="onChangeEndDt($event)"
+                    >
+                    </ExtDatefield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="storeCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, 건 ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            id="pdfPanel"
+            [flex]="1"
+            hidden="1"
+        >
+            <!-- <iframe #extitem src="http://localhost:8000/api/report/selectReport?param=" style="width: 100%;"></iframe> -->
+
+            <iframe #extitem [src]="pdfUrl" style="width: 100%;" id="pdfFrame"></iframe>
+            
+        </ExtPanel>
+
+        <ExtPanel  
+            [layout]="'fit'"
+            [flex]="1"
+            id="gridPanel"
+        >   
+            <ExtGrid
+                (ready)="onReadyGrid($event)"
+                [infinite]="true"
+                [scrollable]="true"
+                [store]="gridStore"   
+                [plugins]="{ gridsummaryrow: true ,gridfilters: true }"      
+                [rowNumbers]="{
+                    width: '50px', text:'No'
+                }"                                
+            >
+                <ExtGridcolumn 
+                    text="부"
+                    [align]="'left'"
+                    dataIndex="buName"
+                    width="76"
+                    summary=""
+                    [summaryRenderer]="this.summarize"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="팀"
+                    [align]="'left'"
+                    dataIndex="timName"
+                    width="76"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="코너"
+                    [align]="'left'"
+                    dataIndex="cornerNo"
+                    width="62"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="코너명"
+                    filter="string"
+                    [align]="'left'"
+                    dataIndex="cornerName"
+                    width="120"
+                    summary="count"
+                    [summaryRenderer]="this.summarizeCount"
+                >
+                </ExtGridcolumn>
+                <ExtColumn
+                    text="고객변심" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfCustChg"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfCustChg"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="상품교환" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfProductExchg"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfProductExchg"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="결제방법교체" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfPaymentChg"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfPaymentChg"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="할인적용" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfApplyDiscount"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfApplyDiscount"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="고객컴플레인" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfCustomerComplaint"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfCustomerComplaint"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="약속불이행" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfNotPromise"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfNotPromise"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="사이즈부적합" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfSizeNotSuitable"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfSizeNotSuitable"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="기타" 
+                    [columns]="return"              
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfEtc"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfEtc"
+                        width="80"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+                <ExtColumn
+                    text="합계" 
+                    [columns]="return"       
+                           
+                >
+                    <ExtGridcolumn 
+                        text="건수"
+                        [align]="'right'"
+                        dataIndex="countOfTotal"
+                        width="60"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="금액"
+                        [align]="'right'"
+                        dataIndex="amtOfTotal"
+                        width="90"
+                        [renderer]="this.renderSign"
+                        summary="sum"
+                        [summaryRenderer]="this.renderSign"
+                    >
+                    </ExtGridcolumn>
+                </ExtColumn>
+            </ExtGrid>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

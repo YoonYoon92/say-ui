@@ -1,0 +1,316 @@
+<!--
+생성자     : '양수영'    생성일 : '20200612' 
+수정자     : ''   수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+       
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtPanel  
+    [shadow]="true" 
+    [layout]="{ type: 'vbox', align: 'strech' }"
+    [border]="true"
+    [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDay"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d(D)'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtSelectfield
+                        label="조회구분"
+                        (change)="onChangeSelect($event)"
+                        value="1"
+                        [options]="[
+                            { text: '주간', name: 'rb', value: '1'},
+                            { text: '요일', name: 'rb', value: '2'},
+                            { text: '팀별', name: 'rb', value: '3' }
+                        ]"
+                    >
+                    </ExtSelectfield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="storeCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [value]="buCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [disabled]="comboOnOff"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [value]="teamCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [disabled]="comboOnOff"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, 명, % ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            [scrollable]="true"
+        >
+            <div #extitem style="width: 100%; height: 100%;">
+
+                <ng-container [ngSwitch]="this.paramModel.selectVal">
+                    <ng-container *ngSwitchCase="'3'">
+                        <table class="table table-striped">
+                            <ng-container *ngFor="let item of weekTimeSaleNewsOrgInqList; let i = index">
+                                <ng-container [ngSwitch]="item.orgcd">
+                                    <ng-container *ngSwitchCase="'000000'"> 
+                                        <thead  class="table table-dark">                                                                                                             
+                                            <tr>      
+                                                <td scope="col" style="font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;" align="center">
+                                                    구 분
+                                                </td>                                                                       
+                                                <td scope="col" align="right" >~11:00</td>
+                                                <td scope="col" align="right" >~13:00</td>
+                                                <td scope="col" align="right" >~14:00</td>
+                                                <td scope="col" align="right" >~15:00</td>
+                                                <td scope="col" align="right" >~16:00</td>
+                                                <td scope="col" align="right" >~17:00</td>
+                                                <td scope="col" align="right" >~18:00</td>
+                                                <td scope="col" align="right" >~19:00</td>
+                                                <td scope="col" align="right" >~20:00</td>
+                                                <td scope="col" align="right" >~21:00</td>
+                                                <td scope="col" align="right" >~24:00</td>
+                                                <td scope="col" align="right" >실적 계</td>
+                                                <td scope="col" align="right" >목표</td>
+                                                <td scope="col" align="right" >차액</td>
+                                                <td scope="col" align="right" >달성율</td>
+                                                <td scope="col" align="right" >고객수</td>                                                
+                                                <td scope="col" align="right" >전년실적</td>                                                
+                                                <td scope="col" align="right" >신장율</td>                                               
+                                            </tr>
+                                        </thead>  
+                                    </ng-container>
+                                
+                                    <ng-container *ngSwitchDefault>  
+                                                                                                             
+                                        <tr>
+                                            <td scope="col" style="font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;" align="left">
+                                                {{item.teamnm}}
+                                            </td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone11preColor} ">{{item.timezone11pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone13preColor} ">{{item.timezone13pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone14preColor} ">{{item.timezone14pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone15preColor} ">{{item.timezone15pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone16preColor} ">{{item.timezone16pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone17preColor} ">{{item.timezone17pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone18preColor} ">{{item.timezone18pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone19preColor} ">{{item.timezone19pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone20preColor} ">{{item.timezone20pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone21preColor} ">{{item.timezone21pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.timezone24preColor} ">{{item.timezone24pre/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.daysaleamountColor} ">{{item.daysaleamount/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.daygoalColor}       ">{{item.daygoal/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.daydifferenceColor} ">{{item.daydifference/1000|number:'1.0-0'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.dayachievementrateColor} ">{{item.dayachievementrate/100|percent:'1.2-2'}}</span></td>
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.customercntColor }  ">{{item.customercnt |number:'1.0-0'}}</span></td>                                                
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.olddaysaleamountColor }">{{item.olddaysaleamount/1000|number:'1.0-0'}}</span></td>                                                
+                                            <td scope="col" align="right" ><span [ngStyle]="{'color':item.strechratColor }    ">{{item.strechrat/100|percent:'1.2-2'}}</span></td>                        
+                                        </tr>
+                                    
+                                    </ng-container>
+                                </ng-container>                        
+                            </ng-container>
+                        </table>
+                    </ng-container>
+
+
+
+                    <ng-container *ngSwitchDefault>                    
+                        <table class="table table-striped">
+                            <thead  class="table table-dark">
+                            <tr>
+                                <td scope="row" *ngFor="let data of weekTimeTitle; let i = index"  style="font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;" align="right">
+                                    {{data}}
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of weekTimeSaleNewsInqList; let i = index">
+                                    <tr>
+                                        <td align="right">{{item.saletime}}</td>
+                                        <ng-container [ngSwitch]="item.saletime">
+                                            <ng-container *ngSwitchCase="'달성율'" >                                        
+                                                <td align="right" ><span [ngStyle]="{'color':item.col6}">{{item.saleday6/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col5}">{{item.saleday5/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col4}">{{item.saleday4/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col3}">{{item.saleday3/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col2}">{{item.saleday2/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col1}">{{item.saleday1/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col} ">{{item.saleday /100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.colcustom }">{{item.saledaycustom  |number:'1.0-0'}}</span></td>
+                                            </ng-container>
+                                            <ng-container *ngSwitchCase="'신장율'" >                                        
+                                                <td align="right" ><span [ngStyle]="{'color':item.col6}">{{item.saleday6/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col5}">{{item.saleday5/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col4}">{{item.saleday4/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col3}">{{item.saleday3/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col2}">{{item.saleday2/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col1}">{{item.saleday1/100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col }">{{item.saleday /100|percent:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.colcustom }">{{item.saledaycustom|number:'1.0-0'}}</span></td>
+                                            </ng-container>
+                                            <ng-container *ngSwitchCase="'객단가'" >
+                                                <td align="right" ><span [ngStyle]="{'color':item.col6}">{{item.saleday6/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col5}">{{item.saleday5/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col4}">{{item.saleday4/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col3}">{{item.saleday3/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col2}">{{item.saleday2/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col1}">{{item.saleday1/1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col }">{{item.saleday /1000|number:'1.2-2'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.colcustom }">{{item.saledaycustom|number:'1.0-0'}}</span></td>
+                                            </ng-container>
+                                            <ng-container *ngSwitchCase="'고객수'" >
+                                                <td align="right" ><span [ngStyle]="{'color':item.col6}">{{item.saleday6|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col5}">{{item.saleday5|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col4}">{{item.saleday4|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col3}">{{item.saleday3|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col2}">{{item.saleday2|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col1}">{{item.saleday1|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col }">{{item.saleday |number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.colcustom }">{{item.saledaycustom|number:'1.0-0'}}</span></td>
+                                            </ng-container>
+                                            <ng-container *ngSwitchDefault >
+                                                <td align="right" ><span [ngStyle]="{'color':item.col6}">{{item.saleday6/1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col5}">{{item.saleday5/1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col4}">{{item.saleday4/1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col3}">{{item.saleday3/1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col2}">{{item.saleday2/1000|number:'1.0-0'}}</span></td>                                        
+                                                <td align="right" ><span [ngStyle]="{'color':item.col1}">{{item.saleday1/1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.col }">{{item.saleday /1000|number:'1.0-0'}}</span></td>
+                                                <td align="right" ><span [ngStyle]="{'color':item.colcustom }">{{item.saledaycustom  |number:'1.0-0'}}</span></td>
+                                            </ng-container>
+                                        </ng-container>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

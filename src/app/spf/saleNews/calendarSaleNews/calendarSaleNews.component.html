@@ -1,0 +1,270 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true" autoSize="true">
+    <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+       
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtContainer  
+        
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+        [autoSize]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="inqYM"                        
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m'"
+                        [floatedPicker]="{
+                            captionFormat: 'Y-m'
+                        }"
+                        label="조회년월"
+                        (change)="onChangeinqYM($event)"
+                        [viewModel]=""
+                        [editable]="false"
+                    >
+                    </ExtDatefield>                    
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox                        
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="storeCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox> 
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>      
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, % ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+
+        <!-- main center area -->
+        <ExtContainer  
+            [layout]="'fit'"
+            [height]="'80px'"
+            [scrollable]="true"
+            [padding]="'0'"
+        >
+            <div #extitem class="calendar p-5" style="width: 100%; height: 100%;">                    
+                <ol class="day-names list-unstyled" style="font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+                    <li class="font-weight-bold text-uppercase nor">구분</li>
+                    <li class="font-weight-bold text-uppercase sun">Sun</li>
+                    <li class="font-weight-bold text-uppercase nor">Mon</li>
+                    <li class="font-weight-bold text-uppercase nor">Tue</li>
+                    <li class="font-weight-bold text-uppercase nor">Wed</li>
+                    <li class="font-weight-bold text-uppercase nor">Thu</li>
+                    <li class="font-weight-bold text-uppercase nor">Fri</li>
+                    <li class="font-weight-bold text-uppercase sat">Sat</li>
+                    <li class="font-weight-bold text-uppercase nor">주계</li>
+                </ol>
+            </div>
+        </ExtContainer>
+        <ExtContainer  
+            [layout]="'fit'"
+            [flex]="1"
+            [scrollable]="true"
+            [autoSize]="true"
+            [padding]="'0'"
+        >
+            <div #extitem class="calendar p-5" style="width: 100%; height: 100%;">
+
+                <!-- 해당월의 일수만큼 for문 -->
+                <ol class="days list-unstyled" >
+            
+                    <ng-container *ngFor="let item of this.formModel; let i = index; first as isFirst; last as isLast">
+                        <div [ngSwitch]="item.saleDate">
+                            <li *ngSwitchCase="'Title'" class="line-r line-l sun line-b">
+                                <div class="date">{{item.dateAndWeatherTitle}}</div>
+                                <div class="event bg-red">{{item.dayGoalTitle}}</div>
+                                <div class="event bg-green">{{item.saleAmountTitle}}</div>                               
+                                <div class="event bg-blue">{{item.achievementRateTitle}}</div>
+                            </li>
+                            <li *ngSwitchCase="null" [class]="dayClass(item)">
+                                <div class="date"><br></div>
+                                <div class="event"><br></div>
+                                <div class="event"><br></div>
+                                <div class="event bg-blue"><br></div>
+                            </li>
+                            <div *ngSwitchCase="'WeekTitle'">
+                                <h6 class="day-names list-unstyled" style="font-size: 15px; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;"> [ 요일계 ] </h6>    
+                                <li class="line-r line-l sun line-b">
+                                    <div class="event bg-red">{{item.dayGoalTitle}}</div>
+                                    <div class="event bg-green">{{item.saleAmountTitle}}</div>                                   
+                                    <div class="event bg-blue">{{item.achievementRateTitle}}</div>
+                                </li>
+                            </div> 
+                            <div *ngSwitchCase="'WeekTotal'">
+                                <li [class]="dayClass(item)">
+                                    <strong><div class="event bg-red"><span [ngStyle]="{'color':item.col2} ">{{item.dayGoal/1000|number:'1.0-0'}}</span></div></strong>
+                                    <strong><div class="event bg-green"><span [ngStyle]="{'color':item.col1} ">{{item.saleAmount/1000|number:'1.0-0'}}</span></div></strong>                                    
+                                    <strong><div class="event bg-blue"><span [ngStyle]="{'color':item.col3} ">{{item.achievementRate/100|percent:'1.2-2'}}</span></div></strong>
+                                </li>
+                            </div>   
+                            <div *ngSwitchCase="'Total'">
+                                <li [class]="dayClass(item)">
+                                    <div class="date"><br></div>
+                                    <strong><div class="event"><span [ngStyle]="{'color':item.col2} ">{{item.dayGoal/1000|number:'1.0-0'}}</span></div></strong>
+                                    <strong><div class="event"><span [ngStyle]="{'color':item.col1} ">{{item.saleAmount/1000|number:'1.0-0'}}</span></div></strong>                                    
+                                    <strong><div class="event bg-blue"><span [ngStyle]="{'color':item.col3} ">{{item.achievementRate/100|percent:'1.2-2'}}</span></div></strong>
+                                </li>
+                            </div>
+                            <div *ngSwitchCase="today">
+                                <li [class]="dayClass(item)">
+                                    <div [ngSwitch]="item.dayNum">
+                                        <div *ngSwitchCase="1">
+                                            <div class="date bg-red" style="color:red" >{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                        <div *ngSwitchCase="7">
+                                            <div class="date bg-red" style="color:blue" >{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="date bg-red">{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                    </div>
+                                    <div class="event bg-red"><span [ngStyle]="{'color':item.col2} ">{{item.dayGoal/1000|number:'1.0-0'}}</span></div>
+                                    <div class="event bg-red"><span [ngStyle]="{'color':item.col1} ">{{item.saleAmount/1000|number:'1.0-0'}}</span></div>                                    
+                                    <div class="event bg-red"><span [ngStyle]="{'color':item.col3} ">{{item.achievementRate/100|percent:'1.2-2'}}</span></div>
+                                </li>
+                            </div>                           
+                            <div *ngSwitchDefault>
+                                <li [class]="dayClass(item)">
+                                    <div [ngSwitch]="item.dayNum">
+                                        <div *ngSwitchCase="1">
+                                            <div class="date" style="color:red" >{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                        <div *ngSwitchCase="7">
+                                            <div class="date" style="color:blue" >{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                        <div *ngSwitchDefault>
+                                            <div class="date">{{item.day}} <em style="color:red" class={{item.weatherIcon}}></em></div>
+                                        </div>
+                                    </div>
+                                    <div class="event"><span [ngStyle]="{'color':item.col2} ">{{item.dayGoal/1000|number:'1.0-0'}}</span></div>
+                                    <div class="event"><span [ngStyle]="{'color':item.col1} ">{{item.saleAmount/1000|number:'1.0-0'}}</span></div>                                    
+                                    <div class="event bg-blue"><span [ngStyle]="{'color':item.col3} ">{{item.achievementRate/100|percent:'1.2-2'}}</span></div>
+                                </li>
+                            </div>
+                        </div>                            
+                    </ng-container>
+                </ol>
+            </div>
+        </ExtContainer>
+    </ExtContainer>
+</ExtContainer>

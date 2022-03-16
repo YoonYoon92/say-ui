@@ -1,0 +1,172 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="사용자재조회" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapSave($event)"
+            text="저장" 
+        >
+        </ExtButton>           
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!-- main left -->
+       <!-- main left -->
+       <ExtPanel 
+            [weight]="10"
+            docked="left"
+            [flex]="1"
+            width="500"
+            [border]="true"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [rowNumbers]="{
+                        width: '50px', text:'No'
+                    }"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    (select)="onSelectGrid($event)"
+                >
+                    <ExtGridcolumn 
+                        text="사번"
+                        dataIndex="userId"
+                        [align]="'left'"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="성  명"
+                        dataIndex="userName"
+                        [align]="'left'"
+                        width="150"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="소   속"
+                        dataIndex="teamName"
+                        [align]="'left'"
+                        width="150"
+                    >
+                    </ExtGridcolumn>
+                </ExtGrid>
+                </ExtContainer>
+        </ExtPanel>
+
+        <!-- main right -->
+        <ExtPanel  
+            [shadow]="false" 
+            [layout]="{ type: 'vbox', align: 'strech' }"
+            height="100%"
+            
+        >
+            <ExtFormpanel
+            [layout]="'fit'"
+                height="100px"
+                [maxHeight]="'10%'"                
+                docked="top"
+                [resizable]="{edges: 'south', dynamic: true}"
+                [border]="true"
+            >
+                <ExtFieldset
+                    [padding]="1"
+                    [defaults]="{ labelAlign: 'placeholder' }"
+                >
+                    
+                    <ExtTextfield
+                        [label]="'Selected User ID'"                        
+                        [disabled]="true"
+                        [value]="this.userModel.userId"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset>
+                <ExtFieldset
+                    [padding]="1"
+                    [defaults]="{ labelAlign: 'placeholder' }"
+                >
+                    <ExtTextfield
+                        [label]="'Selected User Name'"
+                        [disabled]="true"
+                        [value]="this.userModel.userName"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset>
+            </ExtFormpanel>
+
+            <ExtPanel
+                [layout]="'fit'"
+                height="100%"
+                [border]="true"
+            >
+
+                <ExtContainer layout="fit" fitToParent="true">
+
+                    <ExtTree
+                        (ready)="onReadytree($event)"
+                        [shadow]="false"
+                        width="100%"
+                        height="100%"
+                        [store]="treeStore"
+                        
+                        [listeners]="{
+                            selectionchange: this.onSelectionChange
+                        }"
+                        [columns]="[
+                            {
+                                xtype: 'treecolumn',
+                                text: 'Menu/Program',
+                                dataIndex: 'text',
+                                width: 500
+                            },
+                            {
+                                text: 'Program-ID',
+                                dataIndex: 'id',
+                                width: 100
+                            }
+                        ]"
+                    >
+                    </ExtTree>                
+                </ExtContainer>
+            </ExtPanel>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

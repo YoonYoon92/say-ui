@@ -1,0 +1,1616 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            (tap)="onTitleTap($event)"
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDay"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtCombobox
+                        [label]="'조회구분'"
+                        [store]="comboStoreGubun"
+                        [placeholder]="'선택하세요'"
+                        [value]="'달성율'"
+                        [valueField]="'comboId'"
+                        [displayField]="'comboNm'"
+                        [queryMode]="'local'"
+                        [editable]="false"
+                        [clearable]="true"
+                        (change)="comboStoreGubunEvent($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="'01'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtCombobox
+                        [label]="'PC'"
+                        [store]="comboStoreLv4"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv4Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                    <!--
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="true"
+                        [label]="'전년실적'"
+                        name="checkVal1"
+                        [inputValue]=""
+                        (change)="onChangeCheck1($event)"
+                    >
+                    </ExtCheckbox>
+                    -->
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원, % ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+                    <!--
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="true"
+                        [label]="'신장율'"
+                        name="checkVal2"
+                        [inputValue]=""
+                        (change)="onChangeCheck2($event)"
+                    >
+                    </ExtCheckbox>
+                    -->
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area 전체 보여주기-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "mainPanel"    
+            hidden = "1"
+        >
+ 
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{ gridfilters: true  }"
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                <ExtGridcolumn 
+                    text="부서"
+                    filter="string"
+                    [align]="'center'"
+                    dataIndex="buCode"
+                    hidden="true"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부서명"
+                    filter="string"
+                    width="110"
+                    [align]="'left'"
+                    dataIndex="buName"
+                >
+                </ExtGridcolumn>
+                    <ExtColumn 
+                        text="일" 
+                        [columns]="dayCol"
+                            >
+                            <ExtGridcolumn 
+                                text="목표"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayTry"
+                                [renderer]="this.renderSignNormal"
+                                
+                            
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayNetsale"
+                                [renderer]="this.renderSignNormal"
+                                
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt"
+                                [renderer]="this.renderSignNormal"
+                                
+                            >
+                            </ExtGridcolumn>                            
+                            <ExtGridcolumn 
+                                text="달성율"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayAchivmentrate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                               
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="전년실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayLastyearSplan"
+                                [renderer]="this.renderSignNormal"
+                               
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="전년차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt2"
+                                [renderer]="this.renderSignNormal"
+                               
+                            >
+                            </ExtGridcolumn>                            
+                            <ExtGridcolumn 
+                                text="신장율"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayIncrsrate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                               
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="구성비"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayCompRate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                                
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text= "|"
+                                xtype= 'column'
+                                width="5"
+                                dataIndex= "space"
+			                    [align]= "'center'"
+                            >
+                            </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="월" 
+                        [columns]="monthCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTry"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmNetsale"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfnt"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >  
+                        </ExtGridcolumn>                      
+                        <ExtGridcolumn 
+                            text="달성율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmAchivmentrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTryMax"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>                              
+                        <ExtGridcolumn 
+                            text="진도율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmProgresrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfntMax"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>  
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfnt2"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>                        
+                        <ExtGridcolumn 
+                            text="신장율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmIncrsrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="구성비"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmCompRate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text= "|"
+                            xtype= 'column'
+                            width="5"
+                            dataIndex= "space"
+                            [align]= "'center'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="년" 
+                        [columns]="yearCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTry"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyNetsale"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfnt"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>                         
+                        <ExtGridcolumn 
+                            text="달성율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyAchivmentrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                           
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTryMax"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>                        
+                        <ExtGridcolumn 
+                            text="진도율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyProgresrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfntMax"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>  
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfnt2"
+                            [renderer]="this.renderSignNormal"
+                           
+                        >
+                        </ExtGridcolumn>                         
+                        <ExtGridcolumn 
+                            text="신장율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyIncrsrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="구성비"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyCompRate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+        <!-- 달성율 기준 보여주기-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "mainPanelDal"    
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                <ExtGridcolumn 
+                    text="부서"
+                    [align]="'center'"
+                    dataIndex="buCode"
+                    hidden="true"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부서명"
+                    width="110"
+                    [align]="'left'"
+                    dataIndex="buName"
+                >
+                </ExtGridcolumn>
+                    <ExtColumn 
+                        text="일" 
+                        [columns]="dayCol"
+                            >
+                            <ExtGridcolumn 
+                                text="목표"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayTry"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum'
+                                summaryFormatter='number("0,000")'
+                            
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayNetsale"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>                            
+                            <ExtGridcolumn 
+                                text="달성율"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayAchivmentrate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                                summary = 'average'
+                                summaryFormatter='number("000.00%")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="전년실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayLastyearSplan"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text= "|"
+                                xtype= 'column'
+                                width="5"
+                                dataIndex= "space"
+			                    [align]= "'center'"
+                            >
+                            </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="월" 
+                        [columns]="monthCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >  
+                        </ExtGridcolumn>                      
+                        <ExtGridcolumn 
+                            text="달성율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmAchivmentrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text= "|"
+                            xtype= 'column'
+                            width="5"
+                            dataIndex= "space"
+                            [align]= "'center'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="년" 
+                        [columns]="yearCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>                         
+                        <ExtGridcolumn 
+                            text="달성율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyAchivmentrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+        <!-- 신장율 기준 보여주기-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "mainPanelSin"    
+            hidden = "1"    
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                <ExtGridcolumn 
+                    text="부서"
+                    [align]="'center'"
+                    dataIndex="buCode"
+                    hidden="true"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부서명"
+                    width="110"
+                    [align]="'left'"
+                    dataIndex="buName"
+                >
+                </ExtGridcolumn>
+                    <ExtColumn 
+                        text="일" 
+                        [columns]="dayCol"
+                            >
+                            <ExtGridcolumn 
+                                text="목표"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayTry"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum'
+                                summaryFormatter='number("0,000")'
+                            
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayNetsale"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn> 
+                            <ExtGridcolumn 
+                                text="전년실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayLastyearSplan"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="신장율"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayIncrsrate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                                summary = 'average'
+                                summaryFormatter='number("000.00%")'
+                            >
+                            </ExtGridcolumn>                            
+                            <ExtGridcolumn 
+                                text= "|"
+                                xtype= 'column'
+                                width="5"
+                                dataIndex= "space"
+			                    [align]= "'center'"
+                            >
+                            </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="월" 
+                        [columns]="monthCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >  
+                        </ExtGridcolumn>                      
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="신장율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmIncrsrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text= "|"
+                            xtype= 'column'
+                            width="5"
+                            dataIndex= "space"
+                            [align]= "'center'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="년" 
+                        [columns]="yearCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn> 
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="신장율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyIncrsrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+        <!-- 진도율 기준 보여주기-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "mainPanelJin"    
+            hidden = "1"    
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                <ExtGridcolumn 
+                    text="부서"
+                    [align]="'center'"
+                    dataIndex="buCode"
+                    hidden="true"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부서명"
+                    width="110"
+                    [align]="'left'"
+                    dataIndex="buName"
+                >
+                </ExtGridcolumn>
+                    <ExtColumn 
+                        text="일" 
+                        [columns]="dayCol"
+                            >
+                            <ExtGridcolumn 
+                                text="목표"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayTry"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum'
+                                summaryFormatter='number("0,000")'
+                            
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayNetsale"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>                            
+                            <ExtGridcolumn 
+                                text="진도율"
+                                xtype= 'column'
+                                [align]="'right'"
+                                dataIndex="dayAchivmentrate"
+                                width="80"
+                                [renderer]="this.renderSignRate"
+                                summary = 'average'
+                                summaryFormatter='number("000.00%")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text= "|"
+                                xtype= 'column'
+                                width="5"
+                                dataIndex= "space"
+			                    [align]= "'center'"
+                            >
+                            </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="월" 
+                        [columns]="monthCol"
+                    >
+                        <ExtGridcolumn 
+                            text="진도목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTryMax"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfntMax"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >  
+                        </ExtGridcolumn>                      
+                        <ExtGridcolumn 
+                            text="진도율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmProgresrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text= "|"
+                            xtype= 'column'
+                            width="5"
+                            dataIndex= "space"
+                            [align]= "'center'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="년" 
+                        [columns]="yearCol"
+                    >
+                        <ExtGridcolumn 
+                            text="진도목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTryMax"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="진도차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfntMax"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>                         
+                        <ExtGridcolumn 
+                            text="진도율"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyProgresrate"
+                            width="80"
+                            [renderer]="this.renderSignRate"
+                            summary = 'average'
+                            summaryFormatter='number("000.00%")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+        <!-- 전년차액 기준 보여주기-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "mainPanelDnfnt"    
+            hidden = "1"    
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                <ExtGridcolumn 
+                    text="부서"
+                    [align]="'center'"
+                    dataIndex="buCode"
+                    hidden="true"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="부서명"
+                    width="110"
+                    [align]="'left'"
+                    dataIndex="buName"
+                >
+                </ExtGridcolumn>
+                    <ExtColumn 
+                        text="일" 
+                        [columns]="dayCol"
+                            >
+                            <ExtGridcolumn 
+                                text="목표"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayTry"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum'
+                                summaryFormatter='number("0,000")'
+                            
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayNetsale"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn> 
+                            <ExtGridcolumn 
+                                text="전년실적"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayLastyearSplan"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>
+                            <ExtGridcolumn 
+                                text="전년차액"
+                                xtype= 'column'
+                                [align]="'right'"
+                                width="80"
+                                dataIndex="dayDnfnt2"
+                                [renderer]="this.renderSignNormal"
+                                summary = 'sum' 
+                                summaryFormatter='number("0,000")'
+                            >
+                            </ExtGridcolumn>                          
+                            <ExtGridcolumn 
+                                text= "|"
+                                xtype= 'column'
+                                width="5"
+                                dataIndex= "space"
+			                    [align]= "'center'"
+                            >
+                            </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="월" 
+                        [columns]="monthCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >  
+                        </ExtGridcolumn>                      
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="mmLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            width="80"
+                            dataIndex="mmDnfnt2"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text= "|"
+                            xtype= 'column'
+                            width="5"
+                            dataIndex= "space"
+                            [align]= "'center'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn 
+                        text="년" 
+                        [columns]="yearCol"
+                    >
+                        <ExtGridcolumn 
+                            text="목표"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyTry"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum'
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyNetsale"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyDnfnt"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn> 
+                        <ExtGridcolumn 
+                            text="전년실적"
+                            xtype= 'column'
+                            [align]="'right'"
+                            dataIndex="yyLastyearSplan"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            text="전년차액"
+                            xtype= 'column'
+                            [align]="'right'"
+                            width="80"
+                            dataIndex="yyDnfnt2"
+                            [renderer]="this.renderSignNormal"
+                            summary = 'sum' 
+                            summaryFormatter='number("0,000")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>        
+        <!--코너리스트의 보여주는 그리드 출력은 조직과는 다르게 (목표와 신장율등을 뺀다)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            id = "conerPanel"  
+            hidden = "1"    
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="false"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    
+                    [selectable]="{
+                            columns: true,
+                            cells: true,
+                            checkbox: false,
+                            extensible: true,
+                            drag: true
+                    }"
+                    [listeners]="{
+                        selectionchange: this.onSelectionChange
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+                    <ExtGridcolumn 
+                        text="코너번호"
+                        [align]="'center'"
+                        dataIndex="buCode"                        
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코너명"
+                        width="150"
+                        [align]="'left'"
+                        dataIndex="buName"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="일 순매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="dayNetsale"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="일 에누리"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="dayDiscount"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="일 총매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="daySale"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="|"
+                        width="5"
+                        [align]="'right'"
+                        dataIndex="space"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="월 순매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="mmNetsale"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="월 할인"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="mmDiscount"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="월 총매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="mmSale"
+                    >
+                    </ExtGridcolumn>                    
+                    <ExtGridcolumn 
+                        text="|"
+                        width="5"
+                        [align]="'right'"
+                        dataIndex="space"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="년 매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="yyNetsale"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="년 할인"
+                        width="110"                        
+                        dataIndex="yyDiscount"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                    >
+                    </ExtGridcolumn>       
+                    <ExtGridcolumn 
+                        text="년 총매출"
+                        width="110"
+                        [align]="'right'"
+                        [renderer]="this.renderSignNormal"
+                        dataIndex="yySale"
+                    >
+                    </ExtGridcolumn>                             
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

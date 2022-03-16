@@ -1,0 +1,779 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+       
+    </ExtTitlebar>
+
+    <!-- contnent-->
+    <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchFromDay($event)"
+                        [value]="startDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d(D)'"
+                        [floatedPicker]="{
+                            captionFormat: 'Y-m-d'
+                        }"
+                        label="행사일(시작)"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <ExtDatefield
+                        (ready)="onReadysearchToDay($event)"
+                        [value]="endDt"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d(D)'"
+                        [floatedPicker]="{
+                            captionFormat: 'Y-m-d'
+                        }"
+                        label="행사일(종료)"
+                        [editable]="false"
+                        (change)="onChangeEndDt($event)"
+                    >
+                    </ExtDatefield>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox                        
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="storeCd"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >     
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+
+        <!-- main center area -->
+        <ExtPanel  
+            [layout]="'fit'"
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [scrollable]="true"
+                    [store]="gridStore" 
+                    (select)="onSelectGrid($event)"                            
+                >
+                    <ExtGridcolumn 
+                        text="행사시작일"
+                        [align]="'left'"
+                        dataIndex="eventStartDt"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="행사종료일"
+                        [align]="'left'"
+                        dataIndex="eventEndDt"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="조직CD"
+                        [align]="'left'"
+                        dataIndex="orgCd"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코너NO"
+                        [align]="'left'"
+                        dataIndex="corNo"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코너명"
+                        [align]="'left'"
+                        dataIndex="corNm"
+                        width="150"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="행사NO"
+                        [align]="'left'"
+                        dataIndex="eventNo"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="행사명"
+                        [align]="'left'"
+                        dataIndex="eventNm"
+                        width="300"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="DM구분"
+                        [align]="'left'"
+                        dataIndex="dmSortation"
+                        width="80"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="발송일"
+                        [align]="'left'"
+                        dataIndex="sendDt"
+                        width="100"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="발송건수"
+                        [align]="'right'"
+                        dataIndex="sendCnt"
+                        width="90"
+                        [renderer]="this.renderSignNormal"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="상태"
+                        [align]="'left'"
+                        dataIndex="eventSts"
+                        width="90"
+                        [renderer]="this.renderColor"
+                    >
+                    </ExtGridcolumn>      
+                    <ExtGridcolumn 
+                        text="등록일"
+                        [align]="'left'"
+                        dataIndex="regiDt"
+                        width="90"
+                    >
+                    </ExtGridcolumn>                                                                 
+                </ExtGrid>
+
+
+                <!--         세부조회     collapsed          -->
+                <ExtPanel
+                    docked="right"
+                    [hidden]="false"
+                    [collapsed]="isCollapse"
+                    [weight]="5"
+                    width="2000"
+                    layout= "fit"
+                    [style]="{zIndex: 3}"
+                    [resizable]="{ edges: 'west', dynamic: true }"
+                    [header]="false"
+                    [scrollable]="true"
+                    [collapsible]="{ direction: 'right' }"
+                >
+                    <ExtContainer
+                        layout="fit" 
+                        flex="1" 
+                    >
+                        <ExtTitlebar
+                            docked="top"
+                            [platformConfig]="{ 
+                                phone   : { titleAlign: 'center' } 
+                            ,   desktop : { titleAlign: 'right' }
+                            }"
+                            [style]="{class: 'tab-content'}"
+                        >
+                            <ExtButton 
+                                [text]="'닫  기'"
+                                iconCls="x-fa fa-angle-right"
+                                [iconAlign]="'right'" 
+                                [align]="'center'" 
+                                [ui]="'alt round'"
+                                [style]="'color:orange'"
+                                (tap)="onTabDetailInqClosed($event)"
+                                [tooltip]="'close'"
+                            >
+                            </ExtButton>
+                        </ExtTitlebar>                    
+                        
+
+                        <ExtTabpanel
+                            [flex]="1"
+                            [shadow]="true"
+                            [defaults]="{ cls: 'card', layout: 'center' }"
+                        >
+
+                            <!-- 행사내역 대상자 생성 세부내역 tap -->
+
+                            <ExtPanel
+                                title="세부내역"
+                                ui= "grey-tab"
+                                [style]="{class: 'tab-content'}"
+                                [shadow]="true" 
+                                [layout]="{ type: 'vbox', align: 'strech' }"
+                                [border]="true"
+                                [scrollable]="true"
+                                [flex]="1"
+                            >
+                                <ExtPanel  
+                                    [layout]="'fit'" 
+                                    [height]="'100px'" 
+                                    docked="top"
+                                    [resizable]="{edges: 'south', dynamic: true}"
+                                    [maxHeight]="'300px'"
+                                    [minHeight]="'50px'"
+                                >
+                                    <ExtFormpanel
+                                        [layout]="{
+                                            type: 'box',
+                                            vertical: false
+                                        }"
+                                    >
+                                        <!-- First line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtDatefield
+                                                (ready)="onReadysearchFromDay($event)"
+                                                [value]="startDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(시작)"
+                                                [editable]="false"
+                                                (change)="onChangeStartDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                            <ExtDatefield
+                                                (ready)="onReadysearchToDay($event)"
+                                                [value]="endDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(종료)"
+                                                [editable]="false"
+                                                (change)="onChangeEndDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Second line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtCombobox                        
+                                                [label]="'점'"
+                                                [store]="comboStoreLv1"
+                                                [placeholder]="'선택하세요'"
+                                                [value]="storeCd"
+                                                [valueField]="'storeLvCd'"
+                                                [displayField]="'storeLvNm'"
+                                                [queryMode]="'local'"
+                                                [clearable]="true"
+                                                [editable]="false"
+                                                (change)="comboStoreLv1Event($event)"
+                                            >
+                                            </ExtCombobox>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Third line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격 -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Fourth line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >     
+                                        </ExtFieldset> 
+                                    </ExtFormpanel>
+                                    
+                                </ExtPanel>
+                                <!-- CENTER GRID -->
+                                <ExtPanel  
+                                    [layout]="'fit'"
+                                    [flex]="1"
+                                >
+                            
+                            
+                                    <ExtGrid
+                                        (ready)="onReadyDetailGrid($event)"
+                                        [infinite]="true"
+                                        [scrollable]="true"
+                                        [store]="gridDetailStore" 
+                                    >
+                                        <ExtGridcolumn 
+                                            text="구분"
+                                            [align]="'left'"
+                                            dataIndex="sortation"
+                                            width="80"
+                                        >
+                                        </ExtGridcolumn>
+
+                                        <ExtGridcolumn 
+                                            text="정  상"
+                                            [align]="'right'"
+                                            dataIndex="detailNormal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="행  사"
+                                            [align]="'right'"
+                                            dataIndex="detailEvent"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="균  일"
+                                            [align]="'right'"
+                                            dataIndex="detailUniform"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="합  계"
+                                            [align]="'right'"
+                                            dataIndex="detailTotal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                    </ExtGrid> 
+                                </ExtPanel>  
+                            </ExtPanel> 
+
+
+                            <!-- 행사내역 대상자 내역 tap -->
+
+                            <ExtPanel
+                                title="발송대상자"
+                                [shadow]="true" 
+                                [layout]="{ type: 'vbox', align: 'strech' }"
+                                [border]="true"
+                                [scrollable]="true"
+                                [flex]="1"
+                            >
+                                <ExtPanel  
+                                    [layout]="'fit'" 
+                                    [height]="'100px'" 
+                                    docked="top"
+                                    [resizable]="{edges: 'south', dynamic: true}"
+                                    [maxHeight]="'300px'"
+                                    [minHeight]="'50px'"
+                                >
+                                    <ExtFormpanel
+                                        [layout]="{
+                                            type: 'box',
+                                            vertical: false
+                                        }"
+                                    >
+                                        <!-- First line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtDatefield
+                                                (ready)="onReadysearchFromDay($event)"
+                                                [value]="startDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(시작)"
+                                                [editable]="false"
+                                                (change)="onChangeStartDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                            <ExtDatefield
+                                                (ready)="onReadysearchToDay($event)"
+                                                [value]="endDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(종료)"
+                                                [editable]="false"
+                                                (change)="onChangeEndDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Second line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtCombobox                        
+                                                [label]="'점'"
+                                                [store]="comboStoreLv1"
+                                                [placeholder]="'선택하세요'"
+                                                [value]="storeCd"
+                                                [valueField]="'storeLvCd'"
+                                                [displayField]="'storeLvNm'"
+                                                [queryMode]="'local'"
+                                                [clearable]="true"
+                                                [editable]="false"
+                                                (change)="comboStoreLv1Event($event)"
+                                            >
+                                            </ExtCombobox>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Third line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격 -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Fourth line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >     
+                                        </ExtFieldset> 
+                                    </ExtFormpanel>
+                                    
+                                </ExtPanel>
+                                <!-- CENTER GRID -->
+                                <ExtPanel  
+                                    [layout]="'fit'"
+                                    [flex]="1"
+                                >
+                            
+                            
+                                    <ExtGrid
+                                        (ready)="onReadyDetailGrid($event)"
+                                        [infinite]="true"
+                                        [scrollable]="true"
+                                        [store]="gridDetailStore" 
+                                    >
+                                        <ExtGridcolumn 
+                                            text="구분"
+                                            [align]="'left'"
+                                            dataIndex="sortation"
+                                            width="80"
+                                        >
+                                        </ExtGridcolumn>
+
+                                        <ExtGridcolumn 
+                                            text="정  상"
+                                            [align]="'right'"
+                                            dataIndex="detailNormal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="행  사"
+                                            [align]="'right'"
+                                            dataIndex="detailEvent"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="균  일"
+                                            [align]="'right'"
+                                            dataIndex="detailUniform"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="합  계"
+                                            [align]="'right'"
+                                            dataIndex="detailTotal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                    </ExtGrid> 
+                                </ExtPanel>  
+                            </ExtPanel> 
+
+
+                            <!-- 생성대상자 상권 현황 tap -->
+
+                            <ExtPanel
+                                title="발송대상자 상권현황"
+                                [shadow]="true" 
+                                [layout]="{ type: 'vbox', align: 'strech' }"
+                                [border]="true"
+                                [scrollable]="true"
+                                [flex]="1"
+                            >
+                                <ExtPanel  
+                                    [layout]="'fit'" 
+                                    [height]="'100px'" 
+                                    docked="top"
+                                    [resizable]="{edges: 'south', dynamic: true}"
+                                    [maxHeight]="'300px'"
+                                    [minHeight]="'50px'"
+                                >
+                                    <ExtFormpanel
+                                        [layout]="{
+                                            type: 'box',
+                                            vertical: false
+                                        }"
+                                    >
+                                        <!-- First line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtDatefield
+                                                (ready)="onReadysearchFromDay($event)"
+                                                [value]="startDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(시작)"
+                                                [editable]="false"
+                                                (change)="onChangeStartDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                            <ExtDatefield
+                                                (ready)="onReadysearchToDay($event)"
+                                                [value]="endDt"
+                                                destroyPickerOnHide="true"
+                                                [dateFormat]="'Y/m/d(D)'"
+                                                [floatedPicker]="{
+                                                    captionFormat: 'Y-m-d'
+                                                }"
+                                                label="행사일(종료)"
+                                                [editable]="false"
+                                                (change)="onChangeEndDt($event)"
+                                            >
+                                            </ExtDatefield>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Second line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            <ExtCombobox                        
+                                                [label]="'점'"
+                                                [store]="comboStoreLv1"
+                                                [placeholder]="'선택하세요'"
+                                                [value]="storeCd"
+                                                [valueField]="'storeLvCd'"
+                                                [displayField]="'storeLvNm'"
+                                                [queryMode]="'local'"
+                                                [clearable]="true"
+                                                [editable]="false"
+                                                (change)="comboStoreLv1Event($event)"
+                                            >
+                                            </ExtCombobox>
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격  -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Third line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >
+                                            
+                                        </ExtFieldset>
+                        
+                                        <!-- 필드간 좌우 간격 -->
+                                        <ExtComponent [width]="10"></ExtComponent>
+                        
+                                        <!-- Fourth line -->
+                                        <ExtFieldset
+                                            [layout]="'form'"
+                                            [flex]="1"
+                                        >     
+                                        </ExtFieldset> 
+                                    </ExtFormpanel>
+                                    
+                                </ExtPanel>
+                                <!-- CENTER GRID -->
+                                <ExtPanel  
+                                    [layout]="'fit'"
+                                    [flex]="1"
+                                >
+                            
+                            
+                                    <ExtGrid
+                                        (ready)="onReadyDetailGrid($event)"
+                                        [infinite]="true"
+                                        [scrollable]="true"
+                                        [store]="gridDetailStore" 
+                                    >
+                                        <ExtGridcolumn 
+                                            text="구분"
+                                            [align]="'left'"
+                                            dataIndex="sortation"
+                                            width="80"
+                                        >
+                                        </ExtGridcolumn>
+
+                                        <ExtGridcolumn 
+                                            text="정  상"
+                                            [align]="'right'"
+                                            dataIndex="detailNormal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="행  사"
+                                            [align]="'right'"
+                                            dataIndex="detailEvent"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="균  일"
+                                            [align]="'right'"
+                                            dataIndex="detailUniform"
+                                            width="80"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                        <ExtGridcolumn 
+                                            text="합  계"
+                                            [align]="'right'"
+                                            dataIndex="detailTotal"
+                                            width="100"
+                                            [renderer]="this.renderSign"
+                                        >
+                                        </ExtGridcolumn>
+                                    </ExtGrid> 
+                                </ExtPanel>  
+                            </ExtPanel> 
+                            <!--  tap end -->
+
+                        </ExtTabpanel>
+                          
+                    </ExtContainer>
+                </ExtPanel>
+            </ExtContainer>           
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

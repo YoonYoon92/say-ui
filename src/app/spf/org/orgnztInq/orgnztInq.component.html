@@ -1,0 +1,351 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+     
+    
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+                       
+                    <ExtCheckbox 
+                        [label]="'존출력'"
+                        [checked]="false"
+                        (ready)="onZoneCheckShowing($event)"
+                        [value]="'zoneCheck'"
+                        text="zoneCheckShowing"
+                        (change)="zoneCheckbox($event)"
+                        [name]="'priority'"
+                        >
+                    </ExtCheckbox>
+
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                        >
+                    </ExtCombobox>
+                   
+                    <ExtCombobox
+                        [label]="'존'"
+                        [store]="ZoneStore"
+                        [hidden]="true"
+                        (ready)="onZoneShowing($event)"
+                        text="ZoneShowing"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'zoneCd'"
+                        [displayField]="'zoneNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="zoneStoreEvent($event)"
+                        >
+                    </ExtCombobox>
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                        >
+                    </ExtCombobox>
+                    <ExtCheckbox 
+                        [label]="'재사용가능코너출력'"
+                        [checked]="false"
+                        (ready)="onRecycleShowing($event)"
+                        text="recycleCheckShowing"
+                        [value]="'recycleCheck'"
+                        (change)="recycleCheckbox($event)"
+                        [name]="'priority'"
+                        >
+                    </ExtCheckbox>   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'PC'"
+                        [store]="comboStoreLv4"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv4Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+            [scrollable]="true"
+        >
+            <div #extitem style="width: 100%; height: 100%;">
+                <table class="table  table-striped table-bordered table-sm">
+                    <tbody>  
+                        <th scope="col" align="right"  *ngFor="let  item1 of title; let i = index">
+                            {{item1}}  
+                            <ng-container [ngSwitch]="true">
+                                <ng-container width="150" *ngSwitchCase="item1==='점'">
+                                    <tr>
+                                        <td scope="row" width="100">{{title1[0]}}</td>
+                                        <td scope="row" width="150">{{title1[1]}}</td>
+                                        <td scope="row" width="100">{{title1[2]}}</td>
+                                        <td scope="row" width="100">{{title1[3]}}</td>
+                                        <td scope="row" width="100">{{title1[4]}}</td> 
+                                    </tr>
+                                </ng-container> 
+
+                                <ng-container width="150" *ngSwitchCase="item1==='점포'||item1==='부서'">
+                                    <tr>
+                                        <td scope="row" width="100">{{title1[0]}}</td>
+                                        <td scope="row" width="150">{{title1[1]}}</td>
+                                        <td scope="row" width="100">{{title1[2]}}</td>
+                                        <td scope="row" width="100">{{title1[3]}}</td>
+                                        <td scope="row" width="100">{{title1[4]}}</td>
+                                        <td scope="row" width="100">{{title1[5]}}</td>
+                                        <td scope="row" width="100">{{title1[6]}}</td>
+                                        <td scope="row" width="100">{{title1[7]}}</td>    
+                                        <td scope="row" width="100">{{title1[8]}}</td>    
+                                    </tr>
+                                </ng-container>   
+
+                                <ng-container width="150" *ngSwitchCase="item1==='팀'||item1==='코너'">
+                                    <tr>
+                                        <td scope="row" width="100">{{title1[0]}}</td>
+                                        <td scope="row" width="150">{{title1[1]}}</td>
+                                        <td scope="row" width="100">{{title1[2]}}</td>
+                                        <td scope="row" width="100">{{title1[3]}}</td>
+                                        <td scope="row" width="100">{{title1[4]}}</td>
+                                        <td scope="row" width="100">{{title1[5]}}</td>
+                                        <td scope="row" width="100">{{title1[6]}}</td>
+                                        <td scope="row" width="100">{{title1[7]}}</td>    
+                                        
+                                    </tr>
+                                </ng-container> 
+
+                                <ng-container width="150" *ngSwitchCase="item1==='존'">
+                                    <tr>
+                                        <td scope="row" width="100">{{title1[0]}}</td>
+                                        <td scope="row" width="150">{{title1[1]}}</td>
+                                        <td scope="row" width="100">{{title1[2]}}</td>
+                                        <td scope="row" width="100">{{title1[3]}}</td>
+                                        <td scope="row" width="100">{{title1[4]}}</td>
+                                        <td scope="row" width="100">{{title1[5]}}</td>
+                                        <td scope="row" width="100">{{title1[6]}}</td>
+                                    </tr>
+                                </ng-container>    
+
+                                <ng-container width="150" *ngSwitchCase="item1==='재사용가능코너'">
+                                    <tr>
+                                        <td scope="row" width="100">{{title1[0]}}</td>
+                                        <td scope="row" width="150">{{title1[1]}}</td>
+                                        <td scope="row" width="100">{{title1[2]}}</td>
+                                        <td scope="row" width="100">{{title1[3]}}</td>
+                                        <td scope="row" width="100">{{title1[4]}}</td>
+                                        <td scope="row" width="100">{{title1[5]}}</td>
+                                    </tr>
+                                </ng-container>    
+
+                            </ng-container>
+                            <ng-container [ngSwitch]="true">
+                                <ng-container width="150" *ngSwitchCase="item1==='점'">
+                                    <tr *ngFor="let item of orgStore; let i = index">  
+                                        <td scope="row" width="100" align="center" >{{item.orgCode}}</td>
+                                        <td scope="row" width="150" >{{item.nm}}</td>
+                                        <td scope="row" width="150" >{{item.col1}}</td>
+                                        <td scope="row" width="150" >{{item.col2}}</td>
+                                        <td scope="row" width="500" >{{item.col3}}</td>
+                                       
+                                    </tr>
+                                </ng-container>
+
+                                <ng-container width="150" *ngSwitchCase="item1==='점포'||item1==='부서'">
+                                    <tr *ngFor="let item of orgStore; let i = index">  
+                                        <td scope="row" width="100" align="center" >{{item.orgCode}}</td>
+                                        <td scope="row" width="100" >{{item.nm}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col1}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col2}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col3}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col4}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col5}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col6}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col7}}</td>
+        
+                                    </tr>
+                                </ng-container>
+
+                                <ng-container width="150" *ngSwitchCase="item1==='팀'||item1==='코너'">
+                                    <tr *ngFor="let item of orgStore; let i = index">  
+                                        <td scope="row" width="100" align="center" >{{item.orgCode}}</td>
+                                        <td scope="row" width="100" >{{item.nm}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col1}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col2}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col3}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col4}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col5}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col6}}</td>
+                                    </tr>
+                                </ng-container>    
+                                
+                                <ng-container width="150" *ngSwitchCase="item1==='존'">
+                                    <tr *ngFor="let item of orgStore; let i = index">  
+                                        <td scope="row" width="100" align="center" >{{item.orgCode}}</td>
+                                        <td scope="row" width="150" >{{item.nm}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col1}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col2}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col3}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col4}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col5}}</td>
+                                  
+                                    </tr>
+                                </ng-container>  
+                                <ng-container width="150" *ngSwitchCase="item1==='재사용가능코너'">
+                                    <tr *ngFor="let item of orgStore; let i = index">  
+                                        <td scope="row" width="100" align="center" >{{item.orgCode}}</td>
+                                        <td scope="row" width="150" >{{item.nm}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col1}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col2}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col3}}</td>
+                                        <td scope="row" width="100" align="right">{{item.col4}}</td>
+                                        
+                                  
+                                    </tr>
+                                </ng-container>  
+
+                            </ng-container>
+                        </th>
+                    </tbody>
+                </table>
+            </div>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

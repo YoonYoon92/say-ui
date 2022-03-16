@@ -1,0 +1,842 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            (tap)="onTitleTap($event)"
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'">
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <!--
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>                        -->
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton>
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'144px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtDatefield
+                        (ready)="onReadysearchDay($event)"
+                        [value]="searchDay"
+                        destroyPickerOnHide="true"
+                        [dateFormat]="'Y/m/d'"
+                        label="조회일"
+                        [editable]="false"
+                        (change)="onChangeStartDt($event)"
+                    >
+                    </ExtDatefield>
+                    <!--
+                    <ExtCombobox
+                        [width]="100"
+                        [label]="'온라인'"
+                        [store]="comboOnStore"
+                        [placeholder]="'온라인포함'"
+                        [valueField]="'onlineChk'"
+                        [displayField]="'onlineChkNm'"
+                        [queryMode]="'local'"
+                        [labelAlign]="'placeholder'"
+                        [clearable]="true"
+                        (change)="onChangeComboBox($event)"
+                        >
+                    </ExtCombobox>                                  -->
+                    <ExtCombobox
+                        [label]="'PC'"
+                        [store]="comboStoreLv4"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv4Event($event)"
+                    >
+                    </ExtCombobox>
+                </ExtFieldset>
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [value]="'01'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="true"
+                        [label]="'총매출'"
+                        name="checkVal1"
+                        [inputValue]=""
+                        (change)="onChangeCheck1($event)"
+                    >
+                    </ExtCheckbox>
+                </ExtFieldset>
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'부'"
+                        [store]="comboStoreLv2"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv2Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="false"
+                        [label]="'할인'"
+                        name="checkVal2"
+                        [inputValue]=""
+                        (change)="onChangeCheck2($event)"
+                    >
+                    </ExtCheckbox>
+                </ExtFieldset>
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'팀'"
+                        [store]="comboStoreLv3"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv3Event($event)"
+                    >
+                    </ExtCombobox>
+                    <ExtCheckbox
+                        [boxLabel]="''"
+                        [checked]="false"
+                        [label]="'순매출'"
+                        name="checkVal3"
+                        [inputValue]=""
+                        (change)="onChangeCheck3($event)"
+                    >
+                    </ExtCheckbox>
+                    <ExtTextfield
+                        label = ""
+                        value = "[ 단위: 천원 ]"
+                        [textAlign]="'right'"
+                        disabled="true"
+                    >
+                    </ExtTextfield>
+                </ExtFieldset>                 
+            </ExtFormpanel>            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [flex]="1"
+        >
+            <ExtContainer layout="fit" fitToParent="true">
+                <ExtGrid
+                    (ready)="onReadyGrid($event)"
+                    [infinite]="true"
+                    [scrollable]="true"
+                    [store]="gridStore"
+                    [plugins]="{
+                        summaryrow: true
+                        ,gridfilters: true 
+                    }"
+                    [groupFooter]="{
+                        xtype: 'gridsummaryrow'
+                    }"
+                    (select)="onSelectGrid($event)"
+                >
+
+                    <ExtGridcolumn 
+                        text="코너번호"
+                        [align]="'center'"
+                        dataIndex="coner"
+                    >
+                    </ExtGridcolumn>
+                    <ExtGridcolumn 
+                        text="코너명"
+                        width="150"
+                        [align]="'left'"
+                        dataIndex="conerNm"
+                    >
+                    </ExtGridcolumn>
+
+                    <ExtColumn 
+                        text="그래프" [columns]="ratingsColumn"
+                        
+                    >
+                    </ExtColumn>        
+                    
+
+                    <!--1년전부터 당월까지-->
+                    <ExtColumn
+                        [text]="cName12"
+                        [columns]="m12Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1A($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m12Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2A($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m12Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3A($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m12Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName11"
+                        [columns]="m11Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1B($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m11Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2B($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m11Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3B($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m11Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName10"
+                        [columns]="m10Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1C($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m10Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2C($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m10Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3C($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m10Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName09"
+                        [columns]="m09Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1D($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m09Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2D($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m09Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3D($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m09Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName08"
+                        [columns]="m08Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1E($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m08Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2E($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m08Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3E($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m08Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName07"
+                        [columns]="m07Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1F($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m07Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2F($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m07Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3F($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m07Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName06"
+                        [columns]="m06Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1G($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m06Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2G($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m06Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3G($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m06Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName05"
+                        [columns]="m05Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1H($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m05Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2H($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m05Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3H($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m05Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName04"
+                        [columns]="m04Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1I($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m04Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2I($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m04Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3I($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m04Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName03"
+                        [columns]="m03Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1J($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m03Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2J($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m03Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3J($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m03Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName02"
+                        [columns]="m02Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1K($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m02Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2K($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m02Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3K($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m02Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName01"
+                        [columns]="m01Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1L($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m01Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2L($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m01Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3L($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m01Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn
+                            text="|"
+                            width="1"
+                            dataIndex="sep"
+                            [align]="'right'"
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>
+                    <ExtColumn
+                        [text]="cName00"
+                        [columns]="m00Col"
+                    >
+                        <ExtGridcolumn 
+                            (ready)="onColumn1M($event)"		
+                            [hidden]="false"
+                            text="총매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m00Totsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn2M($event)"		
+                            [hidden]="true"
+                            text="할인"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m00Discount"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                        <ExtGridcolumn 
+                            (ready)="onColumn3M($event)"		
+                            [hidden]="true"
+                            text="순매출"
+                            width="80"
+                            [align]="'right'"
+                            dataIndex="m00Netsale"
+                            summaryFormatter='number("000,000")'
+                            formatter = 'number("000,000")'
+                        >
+                        </ExtGridcolumn>
+                    </ExtColumn>                                                                                                                                                                                                                            
+                </ExtGrid>
+            </ExtContainer>
+        </ExtPanel>
+    </ExtPanel>
+</ExtContainer>

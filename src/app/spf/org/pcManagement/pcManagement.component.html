@@ -1,0 +1,436 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapSave($event)"
+            text="저장" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapNew($event)"
+            text="신규" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-close"
+            margin= "0 0 0 5"
+            (tap)="onTapClear($event)"
+            text="초기화" 
+        >
+        </ExtButton>
+       
+        <!-- <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton> -->
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: false}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <!--
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="'01'"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+                    -->
+                    <ExtCombobox
+                        [label]="'점코드'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="'01'"
+                        [queryMode]="'local'"
+                        [clearable]="false"
+                        [disabled]="false"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                        >
+                    </ExtCombobox>
+
+                    <ExtCombobox
+                    [label]="'부코드'"
+                    [store]="comboStoreBu"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'bu'"
+                    [displayField]="'buNm'"
+                    [queryMode]="'local'"
+                    [clearable]="false"
+                    [editable]="false"
+                    (change)="comboStoreBuEvent($event)"
+                    >
+                    </ExtCombobox>
+                    
+                        </ExtFieldset>
+                        
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        >
+                        <ExtCombobox
+                        [label]="'팀코드'"
+                        [store]="comboStoreTim"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'tim'"
+                        [displayField]="'timNm'"
+                        [queryMode]="'local'"
+                        [clearable]="false"
+                        [editable]="false"
+                        (change)="comboStoreTimEvent($event)"
+                        >
+                        </ExtCombobox>
+                        <ExtCombobox
+                        [label]="'PC코드'"
+                        [store]="comboStorePc"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'pc'"
+                        [displayField]="'pcCom'"
+                        [queryMode]="'local'"
+                        [clearable]="false"
+                        [editable]="false"
+                        (change)="comboStorePcEvent($event)"
+                        >
+                        </ExtCombobox>
+                        </ExtFieldset> 
+
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        ></ExtFieldset>
+                        <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                        ></ExtFieldset>
+
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+        <ExtPanel  
+            [layout]="'fit'"  
+            [flex]="1"
+        >
+            <!-- main left -->
+            <ExtPanel 
+                [weight]="10"
+                docked="left"
+                [flex]="1"
+                width="1"
+                [maxWidth]="'1%'"
+                [resizable]="{edges: 'east', dynamic: false}"
+                [border]="true"
+            >
+
+            </ExtPanel>
+
+             <!-- main center -->
+
+            <!--
+                <ExtPanel  
+                    [layout]="'fit'" 
+                    [height]="'60px'" 
+                    docked="top"
+                    [resizable]="{edges: 'south', dynamic: true}"
+                    [maxHeight]="'300px'"
+                    [minHeight]="'50px'"
+                >
+ 
+            </ExtPanel>  
+             -->
+            <ExtPanel  
+                [layout]="'fit'" 
+                
+                [resizable]="{edges: 'south', dynamic: false}"
+                [maxHeight]="'95%'"
+                [minHeight]="'25px'"
+            >
+
+                  
+                    <ExtFieldset
+                        [layout]="'form'"
+                        [flex]="1"
+                    >
+                        
+                    <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'점　　　명'"
+                    [value]="formModel.ms04JumNm"
+                    (change)="onChangeJumNm($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="11"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'부　　　명'"
+                    [value]="formModel.ms04BuNm"
+                    (change)="onChangeBuNm($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="9"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'팀　　　명'"
+                [value]="formModel.ms04TimNm"
+                (change)="onChangeTimNm($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="9"
+                >
+                </ExtTextfield>
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'PC 　 　 명'"
+                [value]="formModel.ms04PcNm"
+                (change)="onChangePcNm($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="9"
+                >
+                </ExtTextfield>
+
+                <ExtNumberfield
+                    [placeholder]="''"
+                    [label]="'직 영 인 원'"
+                    [value]="formModel.ms0409"
+                    (change)="onChange0409($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="5"
+                >
+                </ExtNumberfield>
+
+                    <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'층 　 　 수'"
+                    [value]="formModel.ms0411"
+                    (change)="onChange0411($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="2"
+                >
+                </ExtTextfield>
+
+                    <ExtNumberfield
+                    [placeholder]="''"
+                    [label]="'판 촉 인 원'"
+                    [value]="formModel.ms0412"
+                    (change)="onChange0412($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="5"
+                >
+                </ExtNumberfield>
+
+                    <ExtNumberfield
+                    [placeholder]="''"
+                    [label]="'전 용 면 적'"
+                    [value]="formModel.ms0413"
+                    (change)="onChange0413($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="5"
+                >
+                </ExtNumberfield>
+
+                    <ExtNumberfield
+                    [placeholder]="''"
+                    [label]="'공 유 면 적'"
+                    [value]="formModel.ms0414"
+                    (change)="onChange0414($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [maxLength]="5"
+                >
+                </ExtNumberfield>
+
+                <!-- <ExtTextfield
+                [placeholder]="''"
+                [label]="'부 서 코 드'"
+                [value]="formModel.ms0412"
+                (change)="onChange0412($event)"
+                [required]="false"
+                    [clearable]="false"
+                >
+                </ExtTextfield> -->
+
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'PC 　 장 명'"
+                [value]="formModel.ms0415"
+                (change)="onChange0415($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="7"
+                >
+                </ExtTextfield>
+
+                    <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'코드부여일'"
+                    [value]="formModel.ms0419"
+                    (change)="onChange0419($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [disabled]="true"
+                >
+                </ExtTextfield>
+
+                    <ExtTextfield
+                    [placeholder]="''"
+                    [label]="'코드수정일'"
+                    [value]="formModel.ms0420"
+                    (change)="onChange0420($event)"
+                    [required]="false"
+                    [clearable]="false"
+                    [disabled]="true"
+                >
+                </ExtTextfield>
+
+                <ExtTextfield
+                [placeholder]="''"
+                [label]="'코드폐기일'"
+                [value]="formModel.ms0418"
+                (change)="onChange0418($event)"
+                [required]="false"
+                [clearable]="false"
+                [maxLength]="8"
+            >
+            </ExtTextfield>
+                
+                </ExtFieldset>
+                 <!--2번째열 str-->
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 
+                 >
+                 
+ 
+                 </ExtFieldset> 
+                 <!--2번째열 end-->
+                 <!--3번째열 str-->
+ 
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 >
+                 
+ 
+                 </ExtFieldset>  
+                 <!--3번째열 end-->
+                 <!--4번째열 str-->
+ 
+                 <ExtFieldset
+                 [layout]="'form'"
+                 [flex]="1"
+                 >
+                 
+ 
+                 </ExtFieldset>  
+                 <!--4번째열 end-->
+  
+                
+            </ExtPanel>
+           
+            </ExtPanel>
+        </ExtPanel>
+
+</ExtContainer>

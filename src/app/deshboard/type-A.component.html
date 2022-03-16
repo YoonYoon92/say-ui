@@ -1,0 +1,625 @@
+<ExtContainer layout="fit" fitToParent="true">
+    <ExtPanel  
+        [scrollable]="true"
+    >
+        <!--공지 다이얼로그-->
+        <ExtDialog
+            [displayed]="isNoticeDialog"
+            [title]="noticeDialogTitle"
+            [closable]="true"
+            [maximizable]="true"
+            [closeAction]="'hide'"
+            [bodyPadding]="20"
+            [width]="800"
+            [height]="800"
+            (hide)="noticeDialogHide($event)"
+            [defaultFocus]="'#noticeOk'"
+        >   
+            <ExtPanel
+                [flex]="1"
+                [layout]="'fit'"
+            >
+                <ExtFormpanel
+                    scrollable="y"
+                >
+                    <!-- line 1 -->
+                    <ExtFieldset
+                        [flex]="1"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                    >
+                        <ExtTextfield
+                            [label]="'제목'"
+                            [readOnly]="true"
+                            [value]="noticeDialogItem.title == null ? '' : noticeDialogItem.title"
+                        ></ExtTextfield>
+                    </ExtFieldset>
+
+                    <!-- line 2 -->
+                    <ExtContainer
+                        [layout]="{
+                            type: 'box',
+                            vertical: false
+                        }"
+                    >
+                        <ExtFieldset
+                            [defaults]="{ labelAlign: 'placeholder' }"
+                            [flex]="1"
+                        >
+                            <ExtTextfield
+                                [label]="'시작일'"
+                                [readOnly]="true"
+                                [value]="noticeDialogItem.start == null ? '' : noticeDialogItem.start.substring(0, 4)+'-'+noticeDialogItem.start.substring(4, 6)+'-'+noticeDialogItem.start.substring(6, 8)"
+                            ></ExtTextfield>
+                        </ExtFieldset>
+                        <ExtComponent [width]="10"></ExtComponent>
+                        <ExtFieldset
+                            [defaults]="{ labelAlign: 'placeholder' }"
+                            [flex]="1"
+                        >
+                            <ExtTextfield
+                                [label]="'종료일'"
+                                [readOnly]="true"
+                                [value]="noticeDialogItem.endOrg == null ? '' : noticeDialogItem.endOrg.substring(0, 4)+'-'+noticeDialogItem.endOrg.substring(4, 6)+'-'+noticeDialogItem.endOrg.substring(6, 8)"
+                            ></ExtTextfield>
+                        </ExtFieldset>
+                    </ExtContainer>
+
+                    <!-- line 3 -->
+                    <ExtFieldset
+                        [padding]="padding"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                    >
+                        <div #extitem style="background-color: #fafafa;">
+                            <angular-editor 
+                                [(ngModel)]="noticeDialogItem.desc" 
+                                [config]="config"
+                            ></angular-editor>
+                        </div>
+                        
+                    </ExtFieldset>
+                </ExtFormpanel>
+            </ExtPanel>
+            <ExtToolbar
+                [shadow]="false"
+                [docked]="'bottom'"
+                [layout]="{ type: 'hbox', pack: 'right' }"
+            >
+                <ExtButton [id]="'noticeOk'" text="닫기" [align]="'right'" (tap)="noticeDialogClose()" ></ExtButton>
+            </ExtToolbar>
+        </ExtDialog>
+
+        <!--고객의 소리 다이얼로그-->
+        <ExtDialog
+            [displayed]="isCompainDialog"
+            [title]="compainDialogTitle"
+            [closable]="true"
+            [maximizable]="true"
+            [closeAction]="'hide'"
+            [scrollable]="true"
+            [bodyPadding]="20"
+            [width]="800"
+            [height]="800"
+            (hide)="compainDialogHide($event)"
+            [defaultFocus]="'#compainOk'"
+        >   
+            <ExtPanel
+                [flex]="1"
+                [layout]="'fit'"
+            >
+                <ExtFormpanel
+                    scrollable="y"
+                >
+                    <!-- line 1 -->
+                    <ExtFieldset
+                        [flex]="1"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                    >
+                        <ExtTextfield
+                            [label]="'제목'"
+                            [readOnly]="true"
+                            [value]="compainDialogItem.title == null ? '' : compainDialogItem.title"
+                        ></ExtTextfield>
+                    </ExtFieldset>
+
+                    <!-- line 2 -->
+                    <ExtContainer
+                        [layout]="{
+                            type: 'box',
+                            vertical: false
+                        }"
+                    >
+                        <ExtFieldset
+                            [defaults]="{ labelAlign: 'placeholder' }"
+                            [flex]="1"
+                        >
+                            <ExtTextfield
+                                [label]="'접수일'"
+                                [readOnly]="true"
+                                [value]="compainDialogItem.rcpDate == null ? '' : compainDialogItem.rcpDate.substring(0, 4)+'-'+compainDialogItem.rcpDate.substring(4, 6)+'-'+compainDialogItem.rcpDate.substring(6, 8)"
+                            ></ExtTextfield>
+                        </ExtFieldset>
+                        <ExtComponent [width]="10"></ExtComponent>
+                        <ExtFieldset
+                            [defaults]="{ labelAlign: 'placeholder' }"
+                            [flex]="1"
+                        >
+                            <ExtTextfield
+                                [label]="'완료일'"
+                                [readOnly]="true"
+                                [value]="compainDialogItem.endDate == null ? '' : compainDialogItem.endDate"
+                            ></ExtTextfield>
+                        </ExtFieldset>
+                    </ExtContainer>
+                   
+                    <ExtPanel  
+                    [layout]="{type:'vbox',align:'fit'}" 
+                    [resizable]="{edges: 'south', dynamic: true}"
+                    [scrollable]="true"
+                    
+                    >
+                    <!-- line 3 -->
+                    <ExtFieldset
+                        [padding]="padding"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                        [title]="'발생내역'"
+                    >
+                        <div #extitem style="background-color: #fafafa; overflow:auto;  height:150px; "
+                        >
+                            <angular-editor 
+                                [(ngModel)]="compainDialogItem.desc" 
+                                [config]="config"
+                            ></angular-editor>
+                        </div>
+                       
+                    </ExtFieldset>
+                    <ExtFieldset
+                        [title]="'결과및 경과내역'"
+                        [padding]="padding"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                    >
+                        <div #extitem style="background-color: #fafafa; overflow:auto;  height:150px; "
+                        >
+                            <angular-editor 
+                                [(ngModel)]="compainDialogItem.desc2" 
+                                [config]="config"
+                            ></angular-editor>
+                        </div>
+                       
+                    </ExtFieldset>
+                    <ExtFieldset
+                        [title]="'부서 조치내역'"
+                        [padding]="padding"
+                        [defaults]="{ labelAlign: 'placeholder' }"
+                    >
+                        <div #extitem style="background-color: #fafafa; overflow:auto;  height:150px; "
+                        >
+                            <angular-editor 
+                                [(ngModel)]="compainDialogItem.desc3" 
+                                [config]="config"
+                            ></angular-editor>
+                        </div>
+                       
+                    </ExtFieldset>
+                   
+                    </ExtPanel>
+                </ExtFormpanel>
+            </ExtPanel>
+            <ExtToolbar
+                [shadow]="false"
+                [docked]="'bottom'"
+                [layout]="{ type: 'hbox', pack: 'right' }"
+            >
+                <ExtButton [id]="'compainOk'" text="닫기" [align]="'right'" (tap)="compainDialogClose()" ></ExtButton>
+            </ExtToolbar>
+        </ExtDialog>
+
+        <!-- Line.1 -->
+        <ExtContainer 
+            layout="fit" 
+            flex="1" 
+        >
+            <ExtPanel  
+                [layout]="{ 
+                    type: 'hbox', 
+                    align: 'strech' 
+                }" 
+            >
+                <!--일매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-primary (testClick)="myTestClick($event)" [data]="dailySale"></widget-alert-primary>
+                    </div>
+                </ExtContainer>
+
+                <!--월매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1"
+                    [padding]="padding" 
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-success (testClick)="myTestClick($event)" [data]="monthlySale"></widget-alert-success>
+                    </div>
+                </ExtContainer>
+
+                <!--년매출 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-warning [data]="annualSale"></widget-alert-warning>
+                    </div>
+                </ExtContainer>
+
+                <!--온라인 Container-->
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+                    <div #extitem style="width: 100%; height: 100%;">
+                        <widget-alert-info [data]="onlineSale"></widget-alert-info>
+                    </div>
+                </ExtContainer>
+            </ExtPanel>
+        </ExtContainer>
+
+        <!-- Line.2 -->
+        <ExtContainer 
+            layout="fit" 
+            flex="1" 
+            [padding]="padding"
+        >
+            <ExtPanel  
+                [layout]="{ 
+                    type: 'hbox', 
+                    align: 'strech' 
+                }" 
+            >
+                <div #extitem class="card" style="width: 70%; height: 100%; margin-right: 10px;">
+                    <div class="collapse show" id="lineChartCard">
+                        <div class="card-body">
+                            <widget-chartJs-line [lineModel]="lineChart"></widget-chartJs-line>
+                        </div>
+                    </div>
+                </div>
+
+                <div #extitem class="card" style="width: 30%; height: 100%;">
+                    <div class="card-body">
+                        <widget-chartJs-doughnut [douctModel]="douctChart"></widget-chartJs-doughnut>
+                    </div>
+                  </div>
+                
+            </ExtPanel>
+        </ExtContainer>
+        <ExtContainer 
+            layout="fit" 
+            flex="1" 
+        >
+            <ExtPanel  
+                [layout]="{ 
+                    type: 'hbox', 
+                    align: 'strech' 
+                }" 
+            >
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [flex]="1" 
+                    [padding]="padding"
+                >
+
+                    <!--공지-->
+                    <div  #extitem class="card" style="width: 33%; height: 280px; margin-right: 10px;">
+                        <div class="card-header d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-clipboard-list"></i>&nbsp;공지사항</h6>
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle" role="button" (click)="noticeDetailController()">
+                                    <i class="fas fa-calendar-alt "></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body" style="padding: 0; overflow: auto;">
+                            <ul class="list-group">
+                                <ng-container *ngFor="let item of noticeModel; let i = index">
+                                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="onClickNotice(item, i)">
+                                        {{item.title}}
+                                        <ng-container *ngIf="item.readYn != 'Y'">
+                                            &nbsp;<span class="badge badge-primary">new</span>
+                                        </ng-container>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!--고객의소리-->
+                    <div #extitem class="card" style="width: 33%; height: 280px; margin-right: 10px;">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold text-primary"><i class="fa fa-user-edit"></i>&nbsp;고객의소리</h6>
+                        </div>
+                        <div class="card-body" style="padding: 0; overflow: auto;">
+                            <ul class="list-group">
+                                <ng-container *ngFor="let item of complainModel; let i = index">
+                                    <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" (click)="onClickCompain(item, i)">
+                                        {{item.title}}
+                                        <ng-container *ngIf="item.yn != 'Y'">
+                                            &nbsp;<span class="badge badge-danger">new</span>
+                                        </ng-container>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!--날씨-->
+                    <div #extitem class="card card-weather" style="width: 33%; height: 280px;">
+                        <div class="card-body " *ngIf="weatherMap === undefined else weather">
+                            <div class="weather-date-location">
+                                <h3><i class="fa fa-spinner fa-spin"></i>Loding...</h3>
+                            </div>
+                            <div class="weather-data d-flex">
+                                <div class="d-flex weakly-weather" style=" margin-left: 40px; width: 100%;">
+                                </div>
+                            </div>
+                        </div>
+                        <ng-template #weather>
+                            <div class="card-body ">
+                                <div class="weather-date-location">
+                                    <h3>{{monthNm}}월 {{dayNm}}일 {{weekNm}}요일</h3>
+                                    <p class="text-gray"> 
+                                        <span class="weather-location"  [ngStyle]="{'font-size': '2rem', 'color':this.envService.kToc(weatherMap.current.temp) > 0?'red':'blue'}">
+                                            {{this.envService.kToc(weatherMap.current.temp)}}
+                                            <i class="wi wi-celsius"></i>
+                                        </span>
+                                        &nbsp;
+                                        <ng-container *ngIf="weatherMap.current.rain !== undefined">
+                                            <i class="wi wi-umbrella" style="font-size: 1rem; color: #924da3;"></i>
+                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                {{weatherMap.current.rain}}%
+                                            </span>
+                                        </ng-container>
+                                        <ng-container *ngIf="weatherMap.current.snow !== undefined">
+                                            <i class="wi wi-snowflake-cold" style="font-size: 1rem; color: #924da3;"></i>
+                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                {{weatherMap.current.snow}}%
+                                            </span>
+                                        </ng-container>
+                                        <ng-container *ngIf="weatherMap.current.humidity !== undefined">
+                                            <i class="wi wi-humidity" style="font-size: 1rem; color: #924da3;"></i>
+                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                {{weatherMap.current.humidity}}%
+                                            </span>
+                                        </ng-container>
+                                        
+                                    </p>
+                                    <div style="text-align: right; margin-top: -110px;">
+                                        <h6 class="display-4">
+                                            <i [class]="this.envService.weatherIcon(weatherMap.current.weather[0].icon)"></i>
+                                            <p class="text-gray" style="margin-top: 10px; font-weight: bold;"> 
+                                                <span class="weather-location">
+                                                    {{weatherMap.current.weather[0].description}}
+                                                </span> 
+                                            </p>
+                                        </h6>
+                                    </div>
+                                    <p class="text-gray"> <span class="weather-location"></span> </p>
+                                </div>
+                                <div class="weather-data d-flex" style=" margin-bottom: 50px;">
+                                    <div class="d-flex weakly-weather" style="width: 100%;">
+                                        <ng-container *ngFor="let item of weatherMap.daily; let i = index">
+                                            <div class="weakly-weather-item" *ngIf="i >= 1 && i <= 5">
+                                                <p class="mb-0" style="font-weight: bold;"> {{this.envService.dayOfWeek(i)}}</p> 
+                                                <i [class]="this.envService.weatherIcon(item.weather[0].icon)" style="margin-top: 5px; margin-bottom: 10px; font-size: 2rem;"></i><br>
+                                                <p class="mb-0" style="font-size: 0.8rem; font-weight: bold"> 
+                                                    {{this.envService.kToc(item.temp.min)}}°
+                                                    / 
+                                                    {{this.envService.kToc(item.temp.max)}}°
+                                                </p>
+                                                <p class="mb-0" > 
+                                                    <ng-container *ngIf="item.rain !== undefined else snow">
+                                                        <!-- 강수 -->
+                                                        <i class="wi wi-umbrella" style="font-size: 1rem; color: #924da3;"></i>
+                                                        <span style="font-size: 0.8rem; font-weight: bold">
+                                                            {{item.rain}}㎜
+                                                        </span>
+                                                        
+                                                    </ng-container>
+                                                    <ng-template #snow>
+                                                        <ng-container *ngIf="item.snow !== undefined else humidity">
+                                                            <!-- 눈 -->
+                                                            <i class="wi wi-snowflake-cold" style="font-size: 1rem; color: #924da3;"></i>
+                                                            <span style="font-size: 0.8rem; font-weight: bold">
+                                                                {{item.snow}}㎜
+                                                            </span>
+                                                        </ng-container>
+                                                    </ng-template>
+                                                    <ng-template #humidity>
+                                                        <!-- 습도 -->
+                                                        <i class="wi wi-humidity" style="font-size: 1rem; color: #924da3;"></i>
+                                                        <span style="font-size: 0.8rem; font-weight: bold">
+                                                            {{item.humidity}}%
+                                                        </span>
+                                                     </ng-template>
+                                                </p>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template> 
+                    </div>
+                    
+                </ExtContainer>
+            </ExtPanel>
+            
+        
+        
+        </ExtContainer>
+    </ExtPanel>
+    <ExtPanel
+        docked="left"
+        [hidden]="false"
+        [collapsed]="isCollapse"
+        [weight]="5"
+        width="100%"
+        layout= "fit"
+        [style]="{zIndex: 3}"
+        
+        [header]="false"
+        [collapsible]="{ direction: 'left' }"
+    >
+        <ExtContainer
+            layout="fit" 
+            flex="1" 
+        >
+            <ExtTitlebar
+                docked="top"
+                [platformConfig]="{ 
+                    phone   : { titleAlign: 'center' } 
+                ,   desktop : { titleAlign: 'left' }
+                }"
+            >
+                <ExtButton 
+                    [text]="'이전'"
+                    [align]="'left'" 
+                    iconCls="x-fa fa-angle-left" 
+                    [ui]="'alt round'"
+                    (tap)="noticeDetailController()"
+                    [tooltip]="'close'"
+                >
+                </ExtButton>
+            </ExtTitlebar>
+            <ExtPanel  
+                [layout]="{ 
+                    type: 'hbox', 
+                    align: 'strech' 
+                }" 
+                [scrollable]="true"
+                padding="1 0 0 0"
+            >
+                <ExtContainer  
+                    [layout]="'fit'"   
+                    [width]="'60%'"
+                >
+                    <div #extitem>
+                        <widget-full-calendar [eventModel]="ArrNoticeModel" (itemClick)="calItemClick($event)" (changeDate)="calChangeDate($event)"></widget-full-calendar>
+                    </div>
+                </ExtContainer>
+                <ExtContainer  
+                    [layout]="'fit'"  
+                    [width]="'40%'"
+                >
+                    <ExtTitlebar
+                        [title]="'공지사항'"
+                        docked="top"
+                        [platformConfig]="{ 
+                            phone   : { titleAlign: 'center' } 
+                        ,   desktop : { titleAlign: 'left' }
+                        }"
+                    >
+                    </ExtTitlebar>
+                    <ExtPanel
+                        [flex]="1"
+                        [layout]="'fit'"
+                    >
+                        <ExtFormpanel
+                            scrollable="y"
+                        >
+                            <!-- line 1 -->
+                            <ExtFieldset
+                                [flex]="1"
+                                [defaults]="{ labelAlign: 'placeholder' }"
+                            >
+                                <ExtTextfield
+                                    [label]="'제목'"
+                                    [readOnly]="true"
+                                    [value]="eventItem.title == null ? '' : eventItem.title"
+                                ></ExtTextfield>
+                            </ExtFieldset>
+
+                            <!-- line 2 -->
+                            <ExtContainer
+                                [layout]="{
+                                    type: 'box',
+                                    vertical: false
+                                }"
+                            >
+                                <ExtFieldset
+                                    [defaults]="{ labelAlign: 'placeholder' }"
+                                    [flex]="1"
+                                >
+                                    <ExtTextfield
+                                        [label]="'시작일'"
+                                        [readOnly]="true"
+                                        [value]="eventItem.start == null ? '' : this.envService.getDateToStringFormat(eventItem.start, '-')"
+                                    ></ExtTextfield>
+                                </ExtFieldset>
+                                <ExtComponent [width]="10"></ExtComponent>
+                                <ExtFieldset
+                                    [defaults]="{ labelAlign: 'placeholder' }"
+                                    [flex]="1"
+                                >
+                                    <ExtTextfield
+                                        [label]="'종료일'"
+                                        [readOnly]="true"
+                                        [value]="eventItem.endOrg == null ? '' :eventItem.endOrg.substr(0, 4)+'-'+eventItem.endOrg.substr(4, 2)+'-'+eventItem.endOrg.substr(6, 2)"
+                                    ></ExtTextfield>
+                                </ExtFieldset>
+                            </ExtContainer>
+
+                            <!-- line 3 -->
+                            <ExtFieldset
+                                [padding]="padding"
+                                [defaults]="{ labelAlign: 'placeholder' }"
+                            >
+                                <div #extitem style="background-color: #fafafa;">
+                                    <angular-editor 
+                                        [(ngModel)]="eventItem.desc" 
+                                        [config]="config"
+                                    ></angular-editor>
+                                </div>
+                                
+                            </ExtFieldset>
+                        </ExtFormpanel>
+                    </ExtPanel>
+                </ExtContainer>
+            </ExtPanel>
+        </ExtContainer>
+    </ExtPanel>
+
+
+<!-- 새로고침버튼 -->
+    <ExtContainer
+            (ready)="onElementReady($event)"
+            [style]="{
+                position: 'absolute',
+                left: '10px',
+                top: '180px',
+                width: '60px',
+                height: '60px',
+                padding: '15px 5px 15px 5px',
+                textAlign: 'center',
+                color: '#fff',
+                backgroundColor: '#ff5722',
+                borderRadius: '5px',
+                userSelect: 'none',
+                cursor: 'move'
+            }"
+        >
+            <ExtButton
+                [ui]="'alt round'"
+                iconCls="x-fa fa-sync-alt"
+                (tap)="onReLoadPage($event)"
+                tooltip="Reload"
+            ></ExtButton>
+        </ExtContainer>
+        
+</ExtContainer>
+        

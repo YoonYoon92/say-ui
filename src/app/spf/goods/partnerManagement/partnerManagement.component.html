@@ -1,0 +1,530 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtContainer padding="0" layout="fit" fitToParent="true">
+    <!-- title-->
+        <!-- title-->
+    <ExtTitlebar
+        [title]="route.text"
+        docked="top"
+        [platformConfig]="{ 
+            phone   : { titleAlign: 'center' } 
+        ,   desktop : { titleAlign: 'left' }
+        }"
+    >
+        <ExtButton 
+            [align]="'left'" 
+            iconCls="x-fa fa-th-large"
+            [ui]="'alt round'"
+            (tap)="onTitleTap($event)"
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-search"
+            (tap)="onTapQuery($event)"
+            text="조회" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-save"
+            margin= "0 0 0 5"
+            (tap)="onTapSave($event)"
+            text="저장" 
+        >
+        </ExtButton>
+        <!-- <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-eraser"
+            margin="0 0 0 5"
+            (tap)="onTapModify($event)"
+            text="수정" 
+        >
+        </ExtButton> -->
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-trash-alt"
+            margin= "0 0 0 5"
+            (tap)="onTapDelete($event)"
+            text="폐기" 
+        >
+        </ExtButton>
+        <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-close"
+            margin= "0 0 0 5"
+            (tap)="onTapClear($event)"
+            text="초기화" 
+        >
+        </ExtButton>
+        <!-- <ExtButton 
+            [align]="'right'"
+            [ui]="'alt round'"
+            iconCls="x-fa fa-edit"
+            margin= "0 0 0 5"
+            (tap)="onTapNew($event)"
+            text="신규" 
+        >
+        </ExtButton> -->
+        <!-- <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-excel"
+            (tap)="onTapExcel($event)"
+            tooltip="Excel DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-file-pdf"
+            (tap)="onTapReport($event)"
+            tooltip="Report DownLoad"
+        ></ExtButton>
+        <ExtButton
+            [align]="'right'"
+            [ui]="'alt round'"
+            [style]='{ "float": "right" }'
+            iconCls="x-fa fa-question-circle"
+            (tap)="onTapHelp($event)"
+            tooltip="Help"
+        ></ExtButton> -->
+    </ExtTitlebar>
+
+    <!-- contnent-->
+        <ExtPanel  
+        [shadow]="true" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="true"
+        [scrollable]="true"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'100px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'300px'"
+            [minHeight]="'50px'"
+        >
+            <ExtFormpanel
+                [layout]="{
+                    type: 'box',
+                    vertical: false
+                }"
+            >
+                <!-- First line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtCombobox
+                        [label]="'점'"
+                        [store]="comboStoreLv1"
+                        [placeholder]="'선택하세요'"
+                        [valueField]="'storeLvCd'"
+                        [displayField]="'storeLvNm'"
+                        [value]="jumComboVal"
+                        [queryMode]="'local'"
+                        [clearable]="true"
+                        [editable]="false"
+                        (change)="comboStoreLv1Event($event)"
+                    >
+                    </ExtCombobox>
+                   
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Second line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    <ExtTextfield
+                        [label]="'협력업체'"
+                        [placeholder]="'선택하세요'"
+                        [clearable]="true"
+                        [maxLength]="5"
+                        text="partner"
+                        [inputMask]="'99999-9'"
+                        [autoHideInputMask] = "true"
+                        (change)="partnerEvent($event)"
+                        (ready)="readyPartner($event)"
+                    >
+                    </ExtTextfield>
+                 
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격  -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Third line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                </ExtFieldset>
+
+                <!-- 필드간 좌우 간격 -->
+                <ExtComponent [width]="10"></ExtComponent>
+
+                <!-- Fourth line -->
+                <ExtFieldset
+                    [layout]="'form'"
+                    [flex]="1"
+                >
+                    
+                </ExtFieldset> 
+            </ExtFormpanel>
+            
+        </ExtPanel>
+
+        <!-- main area -->
+         <!-- main area -->
+         <ExtPanel  
+         [layout]="'fit'"  
+         [flex]="1"
+        >
+         <!-- main left -->
+         <ExtPanel 
+             [weight]="10"
+             docked="left"
+             [flex]="1"
+             width="1"
+             [maxWidth]="'1%'"
+             [resizable]="{edges: 'east', dynamic: false}"
+             [border]="true"
+         >
+         </ExtPanel>
+
+     
+         <ExtPanel  
+             [layout]="'fit'" 
+             
+             [resizable]="{edges: 'south', dynamic: false}"
+             [maxHeight]="'95%'"
+             [minHeight]="'25px'"
+         >
+
+               
+        <ExtFieldset
+            [layout]="'form'"
+            [flex]="1"
+        >
+        <ExtTextfield
+            [label]="'사업자번호'"
+            [placeholder]="''"
+            [required]="false"
+            [clearable]="true"
+            [maxLength]="10"
+            [inputMask]="'999-99-99999'"
+            [autoHideInputMask] = "true"
+            [value]="detailPartnerModel.busiNum"
+            (change)="busiNumEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'상호'"
+            [value]="detailPartnerModel.busiNm"
+            [maxLength]="12"
+            (change)="busiNmEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'대표자명'"
+            [maxLength]="4"
+            [value]="detailPartnerModel.owner"
+            (change)="ownerEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'법인등록번호'"
+            [inputMask]="'999999- 9999999'"
+            [autoHideInputMask] = "true"
+            [maxLength]="13"
+            [value]="detailPartnerModel.jumin"
+            (change)="juminEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'우편번호'"
+            [inputMask]="'999-999'"
+            [autoHideInputMask] = "true"
+            [value]="detailPartnerModel.address"
+            (change)="addressEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'주소'"
+            [value]="detailPartnerModel.addressNm"
+            [maxLength]="30"
+            (change)="addressNmEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'업태'"
+            [maxLength]="7"
+            [value]="detailPartnerModel.serviceSect"
+            (change)="serviceSectEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'업종'"
+            [maxLength]="11"
+            [value]="detailPartnerModel.service"
+            (change)="serviceEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'전화번호'"
+            [inputMask]="'999-999-9999'"
+            [autoHideInputMask] = "true"
+            [value]="detailPartnerModel.tel"
+            (change)="telEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'FAX'"
+            [inputMask]="'9999-9999'"
+            [autoHideInputMask] = "true"
+            [value]="detailPartnerModel.fax"
+            (change)="faxEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'이메일 주소'"
+            [value]="detailPartnerModel.email"
+            (change)="emailEvent($event)"
+        ></ExtTextfield>
+        <ExtTextfield
+            [label]="'담당자 명'"
+            [value]="detailPartnerModel.manager"
+            [maxLength]="7"
+            (change)="managerEvent($event)"
+        ></ExtTextfield>
+       
+       
+         
+             </ExtFieldset>
+              <!--2번째열 str-->
+              <ExtFieldset
+              [layout]="'form'"
+              [flex]="1"
+              
+              >
+                <!-- <ExtTextfield
+                    [label]="'은행 코드'"
+                    [readOnly]="true"
+                    [value]="detailPartnerModel.bankCd"
+                    (change)="bankCdEvent($event)"
+                ></ExtTextfield>
+              -->
+                <ExtCombobox
+                    [label]="'전도금 거래선'"
+                    [store]="imprestStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'imprest'"
+                    [displayField]="'imprestNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.imprest"
+                    (change)="imprestEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+                <ExtCombobox
+                    [label]="'지불방법'"
+                    [store]="paymentStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'payment'"
+                    [displayField]="'paymentNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.payment"
+                    (change)="paymentEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+                <ExtCombobox
+                    [label]="'지불산정코드'"
+                    [store]="paymentCdStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'paymentCd'"
+                    [displayField]="'paymentCdNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.paymentCd"
+                    (change)="paymentCdEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+                <ExtCombobox
+                    [label]="'지불연착코드'"
+                    [store]="paymentLateCdStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'paymentLateCd'"
+                    [displayField]="'paymentLateCdNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.paymentLateCd"
+                    (change)="paymentLateCdEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+     
+                <ExtCombobox
+                    [label]="'지급조건'"
+                    [store]="paymentConditionStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'paymentCondition'"
+                    [displayField]="'paymentConditionNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.paymentCondition"
+                    (change)="paymentConditionEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+                 <ExtCombobox
+                    [label]="'어음일자'"
+                    [store]="billDtStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'billDt'"
+                    [displayField]="'billDtNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.billDt"
+                    (change)="billDtEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+                <ExtCombobox
+                    [label]="'계산서구분'"
+                    [store]="calcdivStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'calcdiv'"
+                    [displayField]="'calcdivNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.calcdiv"
+                    (change)="calcdivEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+
+              <ExtCombobox
+                    [label]="'끝전처리'"
+                    [store]="endCdStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'endCd'"
+                    [displayField]="'endCdNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.endCd"
+                    (change)="endCdEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+              <ExtCombobox
+                    [label]="'지역구분'"
+                    [store]="areaDivStore"
+                    [placeholder]="'선택하세요'"
+                    [valueField]="'areaDiv'"
+                    [displayField]="'areaDivNm'"
+                    [queryMode]="'local'"
+                    [clearable]="true"
+                    [value]="detailPartnerModel.areaDiv"
+                    (change)="areaDivEvent($event)"
+                    [editable]="false"
+                >
+                </ExtCombobox>
+        
+
+             
+
+              </ExtFieldset> 
+              <!--2번째열 end-->
+              <!--3번째열 str-->
+
+              <ExtFieldset
+              [layout]="'form'"
+              [flex]="1"
+              >
+              <ExtTextfield
+              [placeholder]="''"
+              [label]="'계약 일자'"
+              [required]="false"
+              [clearable]="false"
+              disabled="true"
+              [value]="detailPartnerModel.contractDt"
+              (change)="contractDtEvent($event)"
+              >
+            </ExtTextfield>
+
+              <ExtTextfield
+              [placeholder]="''"
+              [label]="'입점 일자'"
+              [required]="false"
+              [clearable]="false"
+              disabled="true"
+              [value]="detailPartnerModel.openDt"
+              (change)="openDtEvent($event)"
+              >
+           </ExtTextfield>
+            
+            <ExtTextfield
+                [label]="'관리부서'"
+                [readOnly]="true"
+                [value]="detailPartnerModel.manageBu"
+                (change)="manageBuEvent($event)"
+            ></ExtTextfield>
+            <ExtCombobox
+                [label]="'거래중지'"
+                [store]="tradeStopStore"
+                [placeholder]="'선택하세요'"
+                [valueField]="'tradeStop'"
+                [displayField]="'tradeStopNm'"
+                [queryMode]="'local'"
+                [clearable]="true"
+                [value]="detailPartnerModel.tradeStop"
+                (change)="tradeStopEvent($event)"
+                [editable]="false"
+                >
+                </ExtCombobox>
+            <ExtNumberfield
+                [placeholder]="''"
+                [label]="'삭제일자'"
+                [value]="detailPartnerModel.ParterdelDt"
+                [required]="false"
+                [clearable]="true"
+                (change)="ParterdelDt($event)"
+            ></ExtNumberfield>     
+
+         
+          
+              
+
+              </ExtFieldset>  
+              <!--3번째열 end-->
+              <!--4번째열 str-->
+
+              <ExtFieldset
+              [layout]="'form'"
+              [flex]="1"
+              >
+           
+              </ExtFieldset>  
+              <!--4번째열 end-->
+
+             
+         </ExtPanel>
+        
+         </ExtPanel>
+     </ExtPanel>
+
+
+</ExtContainer>
+

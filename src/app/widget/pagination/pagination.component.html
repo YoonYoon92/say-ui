@@ -1,0 +1,24 @@
+<ExtToolbar docked="bottom">
+    <ExtButton 
+        [align]="'left'" 
+        iconCls="x-fa fa-chevron-left"
+        (tap)="beforePage($event)"
+    >
+    </ExtButton>
+    <ExtLabel [html]="pageInfo"></ExtLabel>
+    <ExtSliderfield
+        [padding]="'0 5'"
+        [minValue]="1"
+        [maxValue]="totPage"
+        [increment]="1"
+        flex="1"
+        [value]="index"
+    >
+    </ExtSliderfield>
+    <ExtButton 
+        [align]="'right'" 
+        iconCls="x-fa fa-chevron-right" 
+        (tap)="afterPage($event)"
+    >
+    </ExtButton>
+</ExtToolbar>

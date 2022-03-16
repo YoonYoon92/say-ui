@@ -1,0 +1,37 @@
+<ExtContainer padding="3" layout="fit" fitToParent="true">
+
+    <ExtPanel  [shadow]="true" [layout]="{ type: 'hbox', align: 'strech' }"  [margin]="'5 5 5 5'">
+        <ExtContainer  [layout]="'center'" style ="background-color:#92318d;" [flex]="1"></ExtContainer>
+        <ExtContainer  [layout]="'center'" style ="background-color:#f6ac1a"  [flex]="1">
+            <ExtFormpanel
+                [shadow]="true"
+            >
+                <ExtFieldset
+                    [title]="''"
+                    [instructions]="'Copyright ⓒ 2020 by SSOF&SAY All Rights Reserved.'"
+                    [width]="300"
+                >
+                    <ExtTextfield
+                        [label]="'아이디'"
+                        [labelAlign]="'placeholder'"
+                        (change)="onChangeId($event)"
+                    
+                    ></ExtTextfield>
+                    <ExtPasswordfield
+                        [label]="'비밀번호'"
+                        [labelAlign]="'placeholder'"
+                        (keyup)="keyUpEvent($event)"
+                        (change)="onChangePassword($event)"
+                    ></ExtPasswordfield>
+                </ExtFieldset>
+                <ExtButton 
+                    [text]="'Login'"
+                    (tap)="accountLogin($event)"
+                    ui="action raised"
+                >
+                </ExtButton>
+            </ExtFormpanel>
+        </ExtContainer>
+        <ExtContainer  [layout]="'center'" style ="background-color:#009b63"  [flex]="1"></ExtContainer>
+    </ExtPanel>
+</ExtContainer>

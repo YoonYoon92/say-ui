@@ -1,0 +1,158 @@
+<!--
+생성자 	 : '' 	생성일 : '' 
+수정자 	 : ''	수정일 : '' 
+@수정내용   : '' 
+-->
+
+<ExtDialog
+    [displayed]="isDialogShowing"
+    [title]="'협력업체 검색'"
+    [closeAction]="'hide'"
+    [bodyPadding]="20"
+    [maxWidth]="1000"
+    [defaultFocus]="'#ok'"
+    (onHide)="onHide()"
+    [html]="' ※ 협렵업체/사업자 번호 또는 명을 입력후 Enter키 또는 찾기버튼을 누르시기 바랍니다. <br><br><p> 찾고자하는 협력업체명에 대소문자 둘다 입력된 경우 구분하여 입력하시기 바랍니다. 예) XinX, EnC, Eu, Enc, Lee <br><br>'"
+    width="1000px"
+    height="560px"
+    [keyMapEnabled]="false"
+    [modal]="true"
+>
+    <ExtWindow
+        [keyMap]="{ESC: 'onEscape', scope: 'this'}"
+    >
+    </ExtWindow>
+    <ExtPanel  
+        [shadow]="false" 
+        [layout]="{ type: 'vbox', align: 'strech' }"
+        [border]="false"
+        [scrollable]="true"
+        height="400px"
+    >
+        <!--search area-->
+        <!--한줄 50px 두줄 100px... (x2)-->
+        <ExtPanel  
+            [layout]="'fit'" 
+            [height]="'50px'" 
+            docked="top"
+            [resizable]="{edges: 'south', dynamic: true}"
+            [maxHeight]="'100px'"
+            [minHeight]="'50px'"
+        >
+        <ExtContainer padding="0" layout="fit" fitToParent="true">
+            <ExtFormpanel
+                [layout]="{
+                    type: 'vbox',
+                    vertical: false,
+                    align: 'left'
+                }"
+                padding="0"                    
+            >
+                <ExtSearchfield
+                    label="협력업체"
+                    [value]="query"
+                    placeholder="협력업체 Search..."   
+                    (action)="ccpySearch($event)"
+                    (change)="onChange($event)"
+                    width="80%"
+                    required="true"
+                >
+                </ExtSearchfield>
+                <ExtComponent [width]="10"></ExtComponent>
+                <ExtButton
+                    flex="1"
+                    layout="fit"
+                    [text]="'찾기'"
+                    (tap)="ccpySearch($event)"
+                    [ui]="'action raised'"
+                    iconCls="x-fa fa-search"
+                    width="20%"
+                ></ExtButton>
+            
+                
+            </ExtFormpanel>
+        </ExtContainer>
+        </ExtPanel>
+        
+        <ExtPanel  
+            [layout]="'fit'"
+            [flex]="1"
+        >
+            <ExtGrid
+                (ready)="onReadyGrid($event)"
+                [infinite]="true"
+                [scrollable]="true"
+                [store]="gridSearchCcpyStore"       
+                [rowNumbers]="{
+                    width: '50px', text:'No'
+                }"  
+                [markDirty]="true"   
+                (select)="onSelectGrid($event)"   
+                height="300px"                                      
+            >
+                <ExtGridcolumn
+                    text="점"
+                    [hidden]="true"
+                    dataIndex="jum"
+                    width="50"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="협력업체번호"
+                    [align]="'left'"
+                    dataIndex="ccpy"
+                    width="120"
+                    summary=""
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="사업자번호"
+                    [align]="'left'"
+                    dataIndex="bizrNo"
+                    width="100"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="거래처명"
+                    [align]="'left'"
+                    dataIndex="cmpNm"
+                    width="200"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="대표자명"
+                    [align]="'left'"
+                    dataIndex="rprsntvNm"
+                    width="100"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="연락처"
+                    [align]="'left'"
+                    dataIndex="tel"
+                    width="110"
+                >
+                </ExtGridcolumn>
+                <ExtGridcolumn 
+                    text="주소(앞)"
+                    [align]="'left'"
+                    dataIndex="addr1"
+                    width="300"
+                >
+                </ExtGridcolumn>
+            </ExtGrid>
+        </ExtPanel>
+    </ExtPanel>
+    <ExtPanel  
+        [layout]="'fit'" 
+        [height]="'50px'" 
+        docked="bottom"
+        [resizable]="{edges: 'south', dynamic: true}"
+        [maxHeight]="'100px'"
+        [minHeight]="'50px'"
+    >
+        <ExtButton text="Cancel" (tap)="onCancel()"></ExtButton>
+        <ExtButton [id]="'ccpyok'" text="OK" (tap)="onOk()"></ExtButton>
+    </ExtPanel>
+    
+</ExtDialog>
