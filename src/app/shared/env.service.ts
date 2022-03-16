@@ -131,7 +131,7 @@ export class EnvService extends ApiHttpService {
                 // {
                 //     id: "Notice", name: "Notice", text: "공지사항 입력", iconCls: "x-fa fa-home", leaf: true
                 // },
-                // //양수영
+                // 
                 // {
                 //     id: "WeekTimeSaleNews", name: "WeekTimeSaleNews", text: "주간시간대별매출", iconCls: "x-fa fa-home", leaf: true
                 // },
@@ -169,7 +169,7 @@ export class EnvService extends ApiHttpService {
                 // {
                 //     id: "GeneralCreditSalesInq", name: "GeneralCreditSalesInq", text: "기타시재 매출조회", iconCls: "x-fa fa-home", leaf: true
                 // },
-                // //한명수
+                // 
                 // {
                 //     id: "ConerMmAvrageSaleInq", name: "ConerMmAvrageSaleInq", text: "코너 기간 실적 & 월 평균 매출 조회", iconCls: "x-fa fa-home", leaf: true
                 // },
@@ -204,7 +204,7 @@ export class EnvService extends ApiHttpService {
                 {
                     id: "ConerBestSaleInq", name: "ConerBestSaleInq", text: "ConerBestSaleInq", iconCls: "x-fa fa-home", leaf: true
                 },
-                // //구경호
+                // 
                 // {
                 //     id: "ClsSaleNews", name: "ClsSaleNews", text: "클래스별매출속보", iconCls: "x-fa fa-home", leaf: true
                 // },
@@ -287,7 +287,7 @@ export class EnvService extends ApiHttpService {
 
               
 
-                // //윤경윤
+                // 
                 // //매출속보
                 // {
                 //     id: "PcLastYearCntstIncrsrateInq", name: "PcLastYearCntstIncrsrateInq", text: "전년대비신장율조회", iconCls: "x-fa fa-home", leaf: true
