@@ -146,7 +146,7 @@ export class TabComponents {
         { id : 'UserProgList',                  component : UserProgListComponent},
         
        
-        /*양수영*/
+       
         { id : 'CalendarSaleNews',              component : CalendarSaleNewsComponent},
         { id : 'WeekTimeSaleNews',              component : WeekTimeSaleNewsComponent},
         { id : 'LastYearCntstWeekSaleNews',     component : LastYearCntstWeekSaleNewsComponent},
@@ -162,7 +162,7 @@ export class TabComponents {
         { id : 'GeneralCreditSalesInq',         component : GeneralCreditSalesInqComponent},
         { id : 'DmEventHisInq',                 component : DmEventHisInqComponent},
         
-        /*한명수*/        
+       
         { id : 'DayBestSaleInq',                component : DayBestSaleInqComponent },
         { id : 'ConerMmAvrageSaleInq',          component : ConerMmAvrageSaleInqComponent},
         { id : 'CloseBefProfitInq',             component : CloseBefProfitInqComponent},
@@ -174,7 +174,7 @@ export class TabComponents {
         { id : 'YearCornerSaleNews',            component : YearCornerSaleNewsComponent},
         { id : 'ConerBestSaleInq',              component : ConerBestSaleInqComponent},
 
-        /*구경호*/
+        
         { id : 'ClsSaleNews',                   component : ClsSaleNewsComponent},
         { id : 'CorpSpecialtradSaleBrkNs',      component : CorpSpecialtradSaleBrkNsComponent},
         { id : 'PeriodyearMmSaleAnalys',        component : PeriodyearMmSaleAnalysComponent},
@@ -212,7 +212,7 @@ export class TabComponents {
 
 
 
-        /*윤경윤*/
+       
         { id : 'BuPlanSaleInq',                 component : BuPlanSaleInqComponent},
         { id : 'PcLastYearCntstIncrsrateInq',   component : PcLastYearCntstIncrsrateInqComponent},
         { id : 'EventHallSaleInq',              component : EventHallSaleInqComponent},
